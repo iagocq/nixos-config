@@ -8,7 +8,7 @@ let baseConfig = { allowUnfree = true; };
     pipewire-utils = import ./pipewire-utils.nix { lib = lib; };
     pw-pa-virtual-sinks = pipewire-utils.virtual-sinks;
     pw-pa-virtual-sources = pipewire-utils.virtual-sources;
-    quantum = 512;
+    quantum = 256;
     quantumstr = builtins.toString quantum;
     #unstable = import <nixos-unstable> { config = baseConfig; };
 in
@@ -115,7 +115,7 @@ in
         "default.clock.min-quantum" = quantum;
         "default.clock.max-quantum" = quantum;
         "log.level" = 2;
-        "link.max-buffers" = 16;
+        "link.max-buffers" = 64;
       };
       "context.objects" = [
         {
@@ -126,8 +126,8 @@ in
             "priority.driver" = 8000;
           };
         }
-      ] ++ (pw-pa-virtual-sinks   [ "Voice" "Desktop" "Extra" ])
-        ++ (pw-pa-virtual-sources [ "Voice" "Mixed"   "Extra" ]);
+      ] ++ (pw-pa-virtual-sinks   [ "Call" "Desktop" "Extra" ])
+        ++ (pw-pa-virtual-sources [ "Voice" "Mixed"  "Extra" ]);
       "context.modules" = [
         {
           name = "libpipewire-module-rtkit";
@@ -216,7 +216,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.iago = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "jackaudio" "audio" ];
+    extraGroups = [ "wheel" "jackaudio" "audio" "docker" ];
     home = "/home/iago-nixos";
     shell = pkgs.zsh;
   };
@@ -234,16 +234,28 @@ in
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.useDns = true;
+
+  virtualisation.docker.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

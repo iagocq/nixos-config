@@ -57,7 +57,7 @@ start_jack() {
 }
 
 pa_virtual_devices() {
-    for pasink in voice desktop extra; do
+    for pasink in call desktop; do
         pactl load-module module-null-sink \
             sink_name="pa_vsink_$pasink" \
             channels=2 \
@@ -65,7 +65,7 @@ pa_virtual_devices() {
             media.class=Audio/Sink \
             device.description=\""`to_upper $pasink` (PA Virt Sink)"\"
     done
-    for pasource in voice mixed extra; do
+    for pasource in mic mixed; do
         pactl load-module module-null-sink \
             sink_name="pa_vsource_$pasource" \
             channels=2 \
@@ -77,9 +77,27 @@ pa_virtual_devices() {
     pactl set-default-source "pa_vsource_voice"
 }
 
+maintain_link() {
+    from="$1"
+    to="$2"
+
+    while true; do
+        pw-link $from $to
+        sleep 1
+    done
+}
+
 #start_jack 2>&1 > start_jack.log
 #pa_virtual_devices
 carla Documents/patchbay-pipewire.carxp &
 firefox &
 telegram-desktop &
-Discord
+Discord &
+
+out="alsa_output.pci-0000_09_00.1.output_hdmi-stereo"
+mic="alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.input_mono-fallback"
+maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FL &
+maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FR &
+maintain_link {pa_vsink_call:monitor,"$out":playback}_FL &
+maintain_link {pa_vsink_call:monitor,"$out":playback}_FR &
+maintain_link "$mic":capture_MONO "Noise Suppressor for Voice (Mono):Input" &

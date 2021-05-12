@@ -21,7 +21,7 @@ let cfgImports = [
     tdesktop discord qbittorrent vlc mpv
     obs-studio logisim feh chatterino2
     lutris steam qjackctl pavucontrol
-    carla ardour jalv
+    carla
     ungoogled-chromium
     multimc ripcord
 
@@ -38,6 +38,7 @@ let cfgImports = [
     unrar
     innoextract
     gnupg
+    man-pages posix_man_pages
     # clinfo cudaPackages.cudatoolkit_10_1
 
     # jack2
@@ -47,7 +48,7 @@ let cfgImports = [
     # Build utils
     binutils gcc cmake gnumake
 
-    python3
+    python3 pipenv poetry
 
     calf
     
@@ -58,6 +59,12 @@ let cfgImports = [
     pulseaudio
 
     monero monero-gui xmr-stak xmrig
+
+    android-studio apktool dex2jar jd-gui
+
+    avahi-compat pkgconfig
+
+    tcpdump
   ];
 
   home.sessionVariables = {

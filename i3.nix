@@ -5,7 +5,7 @@ let mod = "Mod4";
     rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
     alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
     home-dir = "${config.home.homeDirectory}";
-    im-ws = "2"; 
+    im-ws = "3"; 
     web-ws = "1"; 
     audio-ws = "5"; in
 {
@@ -28,11 +28,12 @@ let mod = "Mod4";
         { criteria = { class = "chatterino"; title = ".*'s Usercard"; }; command = "floating enable"; }
         { criteria = { class = "chatterino"; title = "Searching in .* history"; }; command = "floating enable"; }
         { criteria = { class = "Firefox"; }; command = "move to workspace number ${web-ws}"; }
-        { criteria = { class = "TelegramDesktop"; }; command = "move to workspace number ${im-ws}"; }
         { criteria = { class = "discord"; }; command = "move to workspace number ${im-ws}"; }
         { criteria = { class = "Ripcord"; }; command = "move to workspace number ${im-ws}"; }
         { criteria = { class = "Ripcord"; title = "Ripcord Voice Chat"; }; command = "floating enable"; }
+        { criteria = { class = "TelegramDesktop"; }; command = "move to workspace number ${im-ws}"; }
         { criteria = { class = "TelegramDesktop"; title = "Media viewer"; }; command = "fullscreen disable; floating enable; resize set 2560 1080; move position 0 0"; }
+        { criteria = { class = "mpv"; }; command = "fullscreen enable;"; }
         { criteria = { class = "QjackCtl"; }; command = "floating enable; move to workspace number ${audio-ws}"; }
         { criteria = { class = "Carla2"; }; command = "move to workspace number ${audio-ws}"; }
       ];
