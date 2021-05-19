@@ -21,6 +21,5 @@
 
   programs.gnupg.agent.enable = true;
 
-
   common.audio.enable = true;
 }

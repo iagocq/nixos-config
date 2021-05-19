@@ -33,6 +33,8 @@
     extraGroups = [ "jackaudio" "audio" "docker" ];
   };
 
+  common.audio.quantum = 256;
+
   virtualisation.docker.enable = true;
 
   programs.gnupg.agent.enable = true;

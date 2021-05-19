@@ -1,13 +1,15 @@
 { config, lib, pkgs, ... }:
 
-let mod = "Mod4";
-    i3-dm = import ./i3-xfce.nix { inherit mod; };
-    rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
-    alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
-    home-dir = "${config.home.homeDirectory}";
-    im-ws = "5"; 
-    web-ws = "1"; 
-    audio-ws = "6"; in
+let
+  mod = "Mod4";
+  i3-dm = import ./i3-xfce.nix { inherit mod; };
+  rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
+  alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
+  home-dir = "${config.home.homeDirectory}";
+  im-ws = "5";
+  web-ws = "1";
+  audio-ws = "6";
+in
 {
   imports = [ i3-dm.module ./picom.nix ];
 

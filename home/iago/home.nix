@@ -12,7 +12,8 @@ let
     ./vim.nix
     ./vscode.nix
     ./zsh.nix
-  ]; 
+  ];
+  #audio-plugins = with pkgs; [ rnnoise-plugin x42-plugins calf ];
 in
 {
   imports = cfgImports;
@@ -34,16 +35,14 @@ in
     ntfs3g
     tmux
     imagemagick
-    unar innoextract
+    zip unzip p7zip unar atool innoextract
     gnupg
     man-pages posix_man_pages
     screen
     python3
     tcpdump
+    nnn
 
-    # Audio
-    rnnoise-plugin x42-plugins calf
-    
     (texlive.combine { inherit (texlive) scheme-medium abntex2 enumitem lastpage microtype adjustbox collectbox; })
 
     pulseaudio
@@ -52,11 +51,13 @@ in
     adoptopenjdk-hotspot-bin-8
     android-studio apktool dex2jar jd-gui
   ];
+  #++ audio-plugins;
 
   home.sessionVariables = {
     EDITOR = "vim";
     LS_COLORS = builtins.readFile ./sh/LS_COLORS;
     LSCOLORS = builtins.readFile ./sh/LSCOLORS;
+    NNN_OPENER = "${config.xdg.configHome}/nnn/plugins/nuke";
   };
 
   #nixpkgs.config.allowUnfree = true;
