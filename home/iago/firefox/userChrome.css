@@ -1,0 +1,32 @@
+:root {
+    scrollbar-face-color: rgb(210,210,210); /* Firefox 63 compatibility */
+    scrollbar-track-color: rgb(46,54,69); /* Firefox 63 compatibility */
+    scrollbar-color: rgba(0,0,0,.4) rgba(140,140,140,0.1);
+    scrollbar-width: thin;
+}
+
+#sidebar-header {
+    display: none;
+}
+
+#sidebar-splitter {
+    width: 2px !important;
+    border-color: #404040 !important;
+    background-color: #404040 !important;
+}
+
+/* Remove title bar */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
+  opacity: 0;
+  pointer-events: none;
+}
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+
+/* Remove "Tree Style Tab" title bar */
+/*
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+    display: none;
+}
+*/

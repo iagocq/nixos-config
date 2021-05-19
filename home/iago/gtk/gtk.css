@@ -1,0 +1,32 @@
+@import 'colors.css'; /* Should be present in .config/gtk-3.0 */
+
+/* https://ubuntu-mate.community/t/tweaking-your-scrollbar-settings/16161/4 */
+/* https://forum.peppermintos.com/index.php?topic=6808.0 */
+/* https://askubuntu.com/questions/1014560/how-to-remove-overlay-scrollbars-in-ubuntu-17-10-and-18-04 */
+
+scrollbar slider {
+	min-width: 12px;
+	min-height: 12px;
+	border-radius: 0px;
+	border: none;
+}
+
+scrollbar.vertical slider {
+	min-height: 80px;
+}
+
+scrollbar.horizontal slider {
+	min-width: 80px;
+}
+
+/* Works, but I like  the unmodified color */
+/*
+scrollbar slider:hover {
+        background-color: black;
+        border-radius: 0px;
+}
+*/
+
+scrollbar slider:active {
+        background-color: #404040;
+}
