@@ -1,17 +1,19 @@
 { config, lib, pkgs, ... }:
 
-let mod = "Mod4";
-    i3-dm = import ./i3-xfce.nix { inherit mod; };
-    rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
-    alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
-    home-dir = "${config.home.homeDirectory}";
-    im-ws = "3"; 
-    web-ws = "1"; 
-    audio-ws = "5"; in
+let
+  mod = "Mod4";
+  i3-dm = import ./i3-xfce.nix { inherit mod; };
+  rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
+  alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
+  home-dir = "${config.home.homeDirectory}";
+  im-ws = "5";
+  web-ws = "1";
+  audio-ws = "6";
+in
 {
   imports = [ i3-dm.module ./picom.nix ];
 
-  home.file."Pictures/wallpapers/current-wallpaper".source = "${home-dir}/Pictures/wallpapers/terraria-dark-2560x1080.png";
+  #home.file."Pictures/wallpapers/current-wallpaper".source = "${home-dir}/Pictures/wallpapers/terraria-dark-2560x1080.png";
 
   xsession.windowManager.i3 = {
     enable = true;

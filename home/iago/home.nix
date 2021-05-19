@@ -1,18 +1,20 @@
 { config, pkgs, ... }:
 
-let cfgImports = [
-  ./alacritty.nix
-  #./audio.nix
-  ./firefox.nix
-  ./i3.nix
-  ./mpv.nix
-  ./readline.nix
-  ./streamlink.nix
-  ./vim.nix
-  ./vscode.nix
-  ./zsh.nix
-]; 
-    nixos-stable = import <nixos-stable> {}; in
+let
+  cfgImports = [
+    ./alacritty.nix
+    #./audio.nix
+    ./firefox.nix
+    ./i3.nix
+    ./mpv.nix
+    ./readline.nix
+    ./streamlink.nix
+    ./vim.nix
+    ./vscode.nix
+    ./zsh.nix
+  ];
+  #audio-plugins = with pkgs; [ rnnoise-plugin x42-plugins calf ];
+in
 {
   imports = cfgImports;
 
@@ -26,57 +28,42 @@ let cfgImports = [
     multimc ripcord
 
     # Command line applications
-    youtube-dl ffmpeg-full calc git scrot
-    neofetch maim streamlink zip unzip
-    gdb valgrind
-    rr
+    youtube-dl ffmpeg-full calc git
+    neofetch maim streamlink
+    gdb valgrind rr
     vulkan-tools vulkan-loader
     ntfs3g
-    lilv
     tmux
     imagemagick
-    unrar
-    innoextract
+    zip unzip p7zip unar atool innoextract
     gnupg
     man-pages posix_man_pages
-    # clinfo cudaPackages.cudatoolkit_10_1
+    screen
+    python3
+    tcpdump
+    nnn
 
-    # jack2
-    rnnoise-plugin x42-plugins
-    xorg.xmodmap xorg.xev
-
-    # Build utils
-    binutils gcc cmake gnumake
-
-    python3 pipenv poetry
-
-    calf
-    
     (texlive.combine { inherit (texlive) scheme-medium abntex2 enumitem lastpage microtype adjustbox collectbox; })
-    
-    real_time_config_quick_scan
 
     pulseaudio
-
-    monero monero-gui xmr-stak xmrig
-
+    
+    # Java and Android things
+    adoptopenjdk-hotspot-bin-8
     android-studio apktool dex2jar jd-gui
-
-    avahi-compat pkgconfig
-
-    tcpdump
   ];
+  #++ audio-plugins;
 
   home.sessionVariables = {
     EDITOR = "vim";
     LS_COLORS = builtins.readFile ./sh/LS_COLORS;
     LSCOLORS = builtins.readFile ./sh/LSCOLORS;
+    NNN_OPENER = "${config.xdg.configHome}/nnn/plugins/nuke";
   };
 
-  nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowUnfree = true;
 
   # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  #programs.home-manager.enable = true;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
