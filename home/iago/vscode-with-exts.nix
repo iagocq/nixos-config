@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{ pkg, pkgs }:
 
 let
   extensions = (with pkgs.vscode-extensions; [
@@ -10,11 +10,9 @@ let
     ms-python.python
     bbenoist.Nix
   ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace (import ./vscode-marketplace-exts.nix).extensions;
-  vscodium-with-extensions = pkgs.vscode-with-extensions.override {
-    vscode = pkgs.vscodium;
-    vscodeExtensions = extensions;
-  };
 in
-{
-  home.packages = [ vscodium-with-extensions ];
-}
+(pkgs.vscode-with-extensions.override {
+  vscode = pkg;
+  vscodeExtensions = extensions;
+})
+

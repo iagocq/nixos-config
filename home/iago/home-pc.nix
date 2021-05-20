@@ -1,22 +1,9 @@
 { config, pkgs, ... }:
 
-let
-  cfgImports = [
-    ./alacritty.nix
-    #./audio.nix
-    ./firefox.nix
-    ./i3.nix
-    ./mpv.nix
-    ./readline.nix
-    ./streamlink.nix
-    ./vim.nix
-    ./vscode.nix
-    ./zsh.nix
-  ];
-  #audio-plugins = with pkgs; [ rnnoise-plugin x42-plugins calf ];
-in
 {
-  imports = cfgImports;
+  imports = [
+    ./modules.nix
+  ];
 
   home.packages = with pkgs; [
     # Desktop applications
@@ -50,8 +37,9 @@ in
     # Java and Android things
     adoptopenjdk-hotspot-bin-8
     android-studio apktool dex2jar jd-gui
+
+    (import ./vscode-with-exts.nix { pkg = pkgs.vscodium; inherit pkgs; } )
   ];
-  #++ audio-plugins;
 
   home.sessionVariables = {
     EDITOR = "vim";
@@ -60,13 +48,43 @@ in
     NNN_OPENER = "${config.xdg.configHome}/nnn/plugins/nuke";
   };
 
-  #nixpkgs.config.allowUnfree = true;
+  custom.alacritty.enable = true;
+  custom.terminal.cmd = config.custom.alacritty.cmd;
+  custom.rofi.enable = true;
+  custom.i3-xfce.enable = true;
+  custom.i3 = {
+    menu = config.custom.rofi.cmd;
+    screenshot = builtins.replaceStrings [ "\\\n" ] [ "" ] ''
+      maim=${pkgs.maim}/bin/maim \
+      feh=${pkgs.feh}/bin/feh \
+      xdotool=${pkgs.xdotool}/bin/xdotool \
+      xclip=${pkgs.xclip}/bin/xclip \
+      ${./sh/screenshot.sh} \
+    '';
+    login = "${./sh/login.sh}";
+  };
+  custom.picom.enable = true;
+  custom.mpv.enable = true;
+  custom.readline.enable = true;
+  custom.streamlink.enable = true;
+  custom.vim.enable = true;
+  custom.shell.enable = true;
+  custom.zsh.enable = true;
+  custom.zsh.plugins = [
+    {
+      name = "fast-syntax-highlighting";
+      src = pkgs.zsh-f-sy-h.outPath;
+    }
+  ];
 
-  # Let Home Manager install and manage itself.
-  #programs.home-manager.enable = true;
+  programs.firefox = {
+    enable = true;
+    profiles.iago = {
+      isDefault = true;
+      userChrome = builtins.readFile ./firefox/userChrome.css;
+    };
+  };
 
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
   home.username = "iago";
   home.homeDirectory = "/home/iago-nixos";
 

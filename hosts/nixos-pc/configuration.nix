@@ -43,6 +43,8 @@
 
   nixpkgs.config.allowUnfree = true;
   
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   system.stateVersion = "20.09";
 
 }

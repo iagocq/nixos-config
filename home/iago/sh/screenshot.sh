@@ -3,25 +3,25 @@
 f="$HOME/Pictures/screenshots/`date +%Y-%m-%d-%H%M%S.png`"
 
 scr_full() {
-	maim $f
+	$maim $f
 	s=$?
 }
 
 scr_window() {
-	maim -i `xdotool getactivewindow` $f
+	$maim -i `$xdotool getactivewindow` $f
 	s=$?
 }
 
 scr_region() {
-	maim -m 1 | feh -F - &
+	$maim -m 1 | $feh -F - &
 	FEH=$!
-	maim -s $f
+	$maim -s $f
 	s=$?
 	kill $FEH
 }
 
 copy_to_clipboard() {
-	xclip -selection clipboard -t image/png $f
+	$xclip -selection clipboard -t image/png $f
 }
 
 case $1 in

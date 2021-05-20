@@ -1,16 +1,29 @@
-{ mod }:
+{ config, lib, pkgs, ... }:
 
-{ module =
-  { config, lib, pkgs, ... }:
-  {
-    imports = [ ./gtk.nix ];
-    xsession.windowManager.i3.config = {
+with lib;
+
+let
+  cfg = config.custom.i3-xfce;
+in
+{
+  imports = [ ./i3.nix ./gtk.nix ];
+
+  options.custom.i3-xfce = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+    };
+  };
+
+  config = {
+    custom.i3.enable = cfg.enable;
+    custom.gtk.enable = cfg.enable;
+
+    xsession.windowManager.i3.config = mkIf cfg.enable {
       keybindings = lib.mkOptionDefault {
-        "${mod}+Shift+e" = "exec --no-startup-id xfce4-session-logout";
+        "${config.custom.i3.mod}+Shift+e" = "exec --no-startup-id xfce4-session-logout";
       };
       window.commands = [ ];
     };
   };
-  extraConfig = ''
-  '';
 }

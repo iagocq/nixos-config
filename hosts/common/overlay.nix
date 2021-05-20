@@ -1,0 +1,6 @@
+overlays:
+{ ... }:
+
+{
+  nixpkgs.overlays = overlays;
+}

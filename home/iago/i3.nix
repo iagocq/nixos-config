@@ -1,75 +1,113 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
-  mod = "Mod4";
-  i3-dm = import ./i3-xfce.nix { inherit mod; };
+  cfg = config.custom.i3;
   rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
-  alacritty-cmd = "${pkgs.alacritty}/bin/alacritty";
-  home-dir = "${config.home.homeDirectory}";
-  im-ws = "5";
-  web-ws = "1";
-  audio-ws = "6";
 in
 {
-  imports = [ i3-dm.module ./picom.nix ];
-
-  #home.file."Pictures/wallpapers/current-wallpaper".source = "${home-dir}/Pictures/wallpapers/terraria-dark-2560x1080.png";
-
-  xsession.windowManager.i3 = {
-    enable = true;
-
-    config = {
-      modifier = mod;
-      menu = "${rofi-plugins}/bin/rofi -show drun -show-icons";
-      terminal = "${alacritty-cmd}";
-
-      window.commands = [
-        { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
-        { criteria = { window_role = "task_dialog"; }; command = "floating enable"; }
-        { criteria = { class = ".*"; }; command = "border pixel 2"; }
-        { criteria = { class = "chatterino"; title = ".*'s Usercard"; }; command = "floating enable"; }
-        { criteria = { class = "chatterino"; title = "Searching in .* history"; }; command = "floating enable"; }
-        { criteria = { class = "Firefox"; }; command = "move to workspace number ${web-ws}"; }
-        { criteria = { class = "discord"; }; command = "move to workspace number ${im-ws}"; }
-        { criteria = { class = "Ripcord"; }; command = "move to workspace number ${im-ws}"; }
-        { criteria = { class = "Ripcord"; title = "Ripcord Voice Chat"; }; command = "floating enable"; }
-        { criteria = { class = "TelegramDesktop"; }; command = "move to workspace number ${im-ws}"; }
-        { criteria = { class = "TelegramDesktop"; title = "Media viewer"; }; command = "fullscreen disable; floating enable; resize set 2560 1080; move position 0 0"; }
-        { criteria = { class = "mpv"; }; command = "fullscreen enable;"; }
-        { criteria = { class = "QjackCtl"; }; command = "floating enable; move to workspace number ${audio-ws}"; }
-        { criteria = { class = "Carla2"; }; command = "move to workspace number ${audio-ws}"; }
-      ];
-
-      keybindings = lib.mkOptionDefault {
-        "Shift+Print" = "exec ${./sh/screenshot.sh} region";
-        "Print" = "exec ${./sh/screenshot.sh} full";
-        "Ctrl+Print" = "exec ${./sh/screenshot.sh} window";
-      };
-
-      startup = [
-        { command = "${./sh/login.sh}"; notification = false; }
-        { command = "${pkgs.feh}/bin/feh --no-fehbg --bg-fill $HOME/Pictures/wallpapers/current-wallpaper"; always = true; notification = false; }
-      ];
-
-      gaps.inner = 10;
-      gaps.smartGaps = true;
-      gaps.smartBorders = "on";
+  options.custom.i3 = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
     };
 
-    extraConfig = ''
-      exec i3-msg workspace number 4
-      workspace_auto_back_and_forth no
-    '' + i3-dm.extraConfig;
+    mod = mkOption {
+      type = types.str;
+      default = "Mod4";
+    };
+
+    im-ws = mkOption {
+      type = types.str;
+      default = "5";
+    };
+
+    web-ws = mkOption {
+      type = types.str;
+      default = "1";
+    };
+
+    audio-ws = mkOption {
+      type = types.str;
+      default = "6";
+    };
+
+    start-ws = mkOption {
+      type = types.str;
+      default = "1";
+    };
+
+    login = mkOption {
+      type = types.str;
+      default = "";
+    };
+
+    wallpaper = mkOption {
+      type = types.str;
+      default = "${config.home.homeDirectory}/Pictures/wallpapers/current-wallpaper";
+    };
+
+    screenshot = mkOption {
+      type = types.str;
+      default = "";
+    };
+
+    menu = mkOption {
+      type = types.str;
+      default = "${pkgs.dmenu}/bin/dmenu";
+    };
   };
 
-  programs.rofi = {
-    enable = true;
-    package = rofi-plugins;
-    terminal = "${alacritty-cmd}";
-    location = "top";
-    theme = "Arc-Dark";
-  };
+  config = {
 
-  home.packages = with pkgs; [ maim feh xdotool xclip ];
-  home.file.".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
+    xsession.windowManager.i3 = mkIf cfg.enable {
+      enable = true;
+
+      config = {
+        modifier = cfg.mod;
+        menu = "${cfg.menu}";
+        terminal = "${config.custom.terminal.cmd}";
+
+        window.commands = [
+          { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
+          { criteria = { window_role = "task_dialog"; }; command = "floating enable"; }
+          { criteria = { class = ".*"; }; command = "border pixel 2"; }
+          { criteria = { class = "chatterino"; title = ".*'s Usercard"; }; command = "floating enable"; }
+          { criteria = { class = "chatterino"; title = "Searching in .* history"; }; command = "floating enable"; }
+          { criteria = { class = "Firefox"; }; command = "move to workspace number ${cfg.web-ws}"; }
+          { criteria = { class = "discord"; }; command = "move to workspace number ${cfg.im-ws}"; }
+          { criteria = { class = "Ripcord"; }; command = "move to workspace number ${cfg.im-ws}"; }
+          { criteria = { class = "Ripcord"; title = "Ripcord Voice Chat"; }; command = "floating enable"; }
+          { criteria = { class = "TelegramDesktop"; }; command = "move to workspace number ${cfg.im-ws}"; }
+          { criteria = { class = "TelegramDesktop"; title = "Media viewer"; }; command = "fullscreen disable; floating enable; resize set 2560 1080; move position 0 0"; }
+          { criteria = { class = "mpv"; }; command = "fullscreen enable;"; }
+          { criteria = { class = "QjackCtl"; }; command = "floating enable; move to workspace number ${cfg.audio-ws}"; }
+          { criteria = { class = "Carla2"; }; command = "move to workspace number ${cfg.audio-ws}"; }
+        ];
+
+        keybindings = mkIf (cfg.screenshot != "") (lib.mkOptionDefault {
+          "Shift+Print" = "exec ${cfg.screenshot} region";
+          "Print" = "exec ${cfg.screenshot} full";
+          "Ctrl+Print" = "exec ${cfg.screenshot} window";
+        });
+
+        startup = [
+          (mkIf (cfg.login != "") { command = "${cfg.login}"; notification = false; })
+          { command = "${pkgs.feh}/bin/feh --no-fehbg --bg-fill ${cfg.wallpaper}"; always = true; notification = false; }
+        ];
+
+        gaps.inner = 10;
+        gaps.smartGaps = true;
+        gaps.smartBorders = "on";
+      };
+
+      extraConfig = ''
+        exec i3-msg workspace number ${cfg.start-ws}
+        workspace_auto_back_and_forth no
+      '';
+    };
+
+    home.file.".icons/default".source = "${pkgs.capitaine-cursors}/share/icons/capitaine-cursors";
+  };
 }
