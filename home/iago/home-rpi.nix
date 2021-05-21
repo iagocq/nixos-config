@@ -13,6 +13,7 @@
     man-pages posix_man_pages
     screen
     nnn
+    git-crypt
   ];
 
   home.sessionVariables = {

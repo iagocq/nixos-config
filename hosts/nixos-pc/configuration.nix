@@ -6,7 +6,6 @@
 
 {
   imports = [
-    ../common/configuration.nix
     ../common/pc.nix
 
     ./hardware-configuration.nix

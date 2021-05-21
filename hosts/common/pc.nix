@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./audio.nix
+    ./configuration.nix
   ];
 
   hardware.opengl.driSupport32Bit = true;

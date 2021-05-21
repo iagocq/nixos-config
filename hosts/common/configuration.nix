@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./modules.nix
+
     ./users.nix
     ./ssh.nix
   ];

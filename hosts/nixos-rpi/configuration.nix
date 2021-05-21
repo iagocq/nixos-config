@@ -31,5 +31,11 @@
   };
   networking.nameservers = [ "1.1.1.1" ];
 
+  common.bitwarden_rs.enable = true;
+  common.acme.enable = true;
+  common.nginx.enable = true;
+  common.nginx.bitwarden.enable = true;
+  common.nginx.adhole.enable = true;
+
   system.stateVersion = "20.09";
 }

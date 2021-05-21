@@ -29,6 +29,7 @@
     python3
     tcpdump
     nnn
+    git-crypt
 
     (texlive.combine { inherit (texlive) scheme-medium abntex2 enumitem lastpage microtype adjustbox collectbox; })
 
