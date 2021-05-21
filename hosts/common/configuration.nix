@@ -26,4 +26,7 @@
   environment.systemPackages = with pkgs; [
     vim htop file killall nethogs dnsutils coreutils lsof
   ];
+
+  # https://github.com/NixOS/nixpkgs/pull/85073
+  systemd.services.mount-pstore.enable = false;
 }
