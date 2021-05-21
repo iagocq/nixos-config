@@ -21,7 +21,7 @@
     experimental-features = nix-command flakes
   '';
 
-  nixpkgs.config.allowUnfree = lib.mkDefault true;
+  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
     vim htop file killall nethogs dnsutils coreutils lsof
