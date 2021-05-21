@@ -39,12 +39,12 @@
 
   programs.gnupg.agent.enable = true;
 
+  networking.hostName = "nixos-pc";
   networking.firewall.enable = false;
+  networking.wireless.enable = false;
+  networking.interfaces.enp8s0.useDHCP = true;
 
-  nixpkgs.config.allowUnfree = true;
-  
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   system.stateVersion = "20.09";
-
 }

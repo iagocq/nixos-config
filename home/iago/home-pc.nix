@@ -16,7 +16,7 @@
 
     # Command line applications
     youtube-dl ffmpeg-full calc git
-    neofetch maim streamlink
+    neofetch streamlink
     gdb valgrind rr
     vulkan-tools vulkan-loader
     ntfs3g
@@ -39,13 +39,12 @@
     android-studio apktool dex2jar jd-gui
 
     (import ./vscode-with-exts.nix { pkg = pkgs.vscodium; inherit pkgs; } )
+
+    calf rnnoise-plugin x42-plugins
   ];
 
   home.sessionVariables = {
-    EDITOR = "vim";
-    LS_COLORS = builtins.readFile ./sh/LS_COLORS;
-    LSCOLORS = builtins.readFile ./sh/LSCOLORS;
-    NNN_OPENER = "${config.xdg.configHome}/nnn/plugins/nuke";
+    NNN_OPENER = "${pkgs.nnn-src}/plugins/nuke";
   };
 
   custom.alacritty.enable = true;

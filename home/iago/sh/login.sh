@@ -13,7 +13,7 @@ maintain_link() {
 #start_jack 2>&1 > start_jack.log
 #pa_virtual_devices
 #source $HOME/.config/carla-env
-LADSPA_PATH="$LADSPA_PATH" LV2_PATH="$LV2_PATH" carla Documents/patchbay-pipewire.carxp &
+carla Documents/patchbay-pipewire.carxp &
 firefox &
 telegram-desktop &
 Discord &

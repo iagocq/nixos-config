@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -20,6 +20,8 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
+
+  nixpkgs.config.allowUnfree = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
     vim htop file killall nethogs dnsutils coreutils lsof

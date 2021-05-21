@@ -100,18 +100,6 @@ in
 
       '';
 
-      #plugins = [
-      #  {
-      #    name = "fast-syntax-highlighting";
-      #    src = pkgs.fetchFromGitHub {
-      #      owner = "zdharma";
-      #      repo = "fast-syntax-highlighting";
-      #      rev = "5351bd907ea39d9000b7bd60b5bb5b0b1d5c8046";
-      #      sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
-      #    };
-      #  }
-      #];
-
       plugins = cfg.plugins;
     };
   };

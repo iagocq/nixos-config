@@ -1,9 +1,9 @@
-{ ... }:
+{ lib, ... }:
 
 {
   services.openssh = {
     enable = true;
     useDns = true;
-    permitRootLogin = "no";
+    permitRootLogin = lib.mkDefault "no";
   };
 }

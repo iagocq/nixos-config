@@ -3,7 +3,6 @@
 {
   imports = [
     ./alacritty.nix
-    ./firefox.nix
     ./i3.nix
     ./i3-xfce.nix
     ./mpv.nix
