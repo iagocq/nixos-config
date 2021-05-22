@@ -76,7 +76,7 @@ in
       };
     };
 
-    adhole = {
+    adguard = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -85,6 +85,16 @@ in
       domain = mkOption {
         type = types.str;
         default = "ad.${cfg.domain}";
+      };
+
+      address = mkOption {
+        type = types.str;
+        default = config.common.adguard.address;
+      };
+
+      port = mkOption {
+        type = types.port;
+        default = config.common.adguard.port;
       };
     };
   };
@@ -118,6 +128,14 @@ in
 
           "/notifications/negotiate" = {
             proxyPass = "http://${cfg.bitwarden.address}:${toString cfg.bitwarden.port}";
+          };
+        };
+      });
+
+      virtualHosts.${cfg.adguard.domain} = mkIf cfg.adguard.enable (mkVhost {
+        locations = {
+          "/" = {
+            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.port}";
           };
         };
       });
