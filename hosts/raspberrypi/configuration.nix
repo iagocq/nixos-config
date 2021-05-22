@@ -7,7 +7,7 @@
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "nixos-rpi";
+  networking.hostName = "raspberrypi";
   networking.firewall.enable = false;
   networking.wireless.enable = false;
   networking.interfaces.eth0.ipv4 = {

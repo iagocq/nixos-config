@@ -38,7 +38,7 @@
 
   programs.gnupg.agent.enable = true;
 
-  networking.hostName = "nixos-pc";
+  networking.hostName = "desktop-iago";
   networking.firewall.enable = false;
   networking.wireless.enable = false;
   networking.interfaces.enp8s0.useDHCP = true;

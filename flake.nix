@@ -20,39 +20,26 @@
       (final: prev: { zsh-f-sy-h = inputs.zsh-f-sy-h; })
       (final: prev: { nnn-src = inputs.nnn-src; })
     ];
+    mkSystem = { host, arch, extra-modules ? [], extra ? {}}: nixpkgs.lib.nixosSystem ({
+      system = arch;
+      modules = [
+        (import ./hosts/common/overlay.nix overlays)
+        (import (./hosts + "/${host}/configuration.nix"))
+        home-manager.nixosModules.home-manager {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.iago = import (./home/iago + "/home-${host}.nix");
+          };
+        }
+      ] ++ extra-modules;
+    } // extra);
   in
   {
     nixosConfigurations = {
 
-      nixos-pc = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          (import ./hosts/common/overlay.nix overlays) 
-          ./hosts/nixos-pc/configuration.nix
-          home-manager.nixosModules.home-manager {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.iago = import ./home/iago/home-pc.nix;
-            };
-          }
-        ];
-      };
-
-      nixos-rpi = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          (import ./hosts/common/overlay.nix overlays)
-          ./hosts/nixos-rpi/configuration.nix
-          home-manager.nixosModules.home-manager {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.iago = import ./home/iago/home-rpi.nix;
-            };
-          }
-        ];
-      };
+      desktop-iago = mkSystem { host = "desktop-iago"; arch = "x86_64-linux"; };
+      raspberrypi  = mkSystem { host = "raspberrypi";  arch = "aarch64-linux"; };
 
       # nix build .#nixosConfigurations.nixos-rpi-sd-image.config.system.build.sdImage
       nixos-rpi-sd-image = nixpkgs.lib.nixosSystem {
