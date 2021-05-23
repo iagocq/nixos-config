@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.common.nginx;
+  s = config.common.secrets;
   mkVhost = vhost: 
     { extraConfig = cfg.sslExtraConfig
         + (if builtins.hasAttr "extraConfig" vhost then vhost.extraConfig else ""); }
@@ -18,13 +19,13 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = "${config.common.secrets.domain}";
+      default = s.network.domain;
     };
 
     ssl = mkOption {
       type = types.anything;
       default = {
-        useACMEHost = "${cfg.domain}";
+        useACMEHost = cfg.domain;
         forceSSL = true;
       };
     };
@@ -96,6 +97,11 @@ in
         type = types.port;
         default = config.common.adguard.port;
       };
+
+      betaPort = mkOption {
+        type = types.port;
+        default = 0;
+      };
     };
   };
 
@@ -136,6 +142,9 @@ in
         locations = {
           "/" = {
             proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.port}";
+          };
+          "/beta/" = mkIf (cfg.adguard.betaPort != 0) {
+            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.betaPort}";
           };
         };
       });

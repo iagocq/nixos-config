@@ -11,7 +11,7 @@
     obs-studio logisim feh chatterino2
     lutris steam qjackctl pavucontrol
     carla
-    ungoogled-chromium
+    #ungoogled-chromium
     multimc ripcord
 
     # Command line applications
