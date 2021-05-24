@@ -1,11 +1,8 @@
 #!/bin/sh
 
 maintain_link() {
-    from="$1"
-    to="$2"
-
     while true; do
-        pw-link $1 $2
+        pw-link "$1" "$2"
         sleep 1
     done
 }
