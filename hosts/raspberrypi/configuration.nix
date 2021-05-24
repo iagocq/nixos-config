@@ -19,6 +19,7 @@ in
   };
   networking.nameservers = [ s.network.dns-server ];
   networking.extraHosts = s.network.raspberrypi.extraHosts;
+  networking.domain = s.network.intranet-domain;
 
   common.bitwarden_rs.enable = true;
   common.adguard.enable = true;
