@@ -18,8 +18,8 @@ firefox &
 telegram-desktop &
 Discord &
 
-out="alsa_output.pci-0000_09_00.1.output_hdmi-stereo"
-mic="alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.input_mono-fallback"
+out="alsa_output.pci-0000_09_00.1.hdmi-stereo"
+mic="alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.mono-fallback"
 maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FL &
 maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FR &
 maintain_link {pa_vsink_call:monitor,"$out":playback}_FL &
