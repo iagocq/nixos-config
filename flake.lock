@@ -20,17 +20,49 @@
         "type": "github"
       }
     },
-    "nixpkgs": {
+    "iago-nixpkgs": {
       "locked": {
-        "lastModified": 1621709817,
-        "narHash": "sha256-alr6TpRkuNxNxNOX4NvGmQ6MJ7UYnsIWDs+iqW4J8zk=",
+        "lastModified": 1621876349,
+        "narHash": "sha256-wJMkoUjBKQ2w0+j+LQNf2u5YuPEKsFPW8lMPldnK2Zs=",
         "owner": "iagocq",
         "repo": "nixpkgs",
-        "rev": "d70e632c68a0476e0396504a89abf1452840b4a4",
+        "rev": "e80685c36479a73505cd5aab5c49a9edcb815bd5",
         "type": "github"
       },
       "original": {
         "owner": "iagocq",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1621714816,
+        "narHash": "sha256-u6Rhw+1uwaTXThZWuySv9JPXzNuKI9Fmj36g4kb2Ojc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "278bcdce1f0da616661a6205161b13bd89a2f3bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-master": {
+      "locked": {
+        "lastModified": 1621975130,
+        "narHash": "sha256-xky6zVWjYS0h6tuRk+T2iNPG5LJxqRuzSvrzaA+Zu5Q=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0995d4e24d10257bc25dcc7d9f88653437c0a7eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -54,7 +86,9 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "iago-nixpkgs": "iago-nixpkgs",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-master": "nixpkgs-master",
         "nnn-src": "nnn-src",
         "zsh-f-sy-h": "zsh-f-sy-h"
       }
