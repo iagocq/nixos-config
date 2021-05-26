@@ -64,9 +64,12 @@ in
           echo "Could not load keymap. Run zkbd to create one."
         fi
         
-        [[ -n ''${key[Delete]} ]] && bindkey "''$key[Delete]" delete-char
-        [[ -n ''${key[Home]} ]]   && bindkey "''$key[Home]"   beginning-of-line
-        [[ -n ''${key[End]} ]]    && bindkey "''$key[End]"    end-of-line
+        [[ -n ''${key[Delete]} ]] && bindkey "''${key[Delete]}" delete-char
+        [[ -n ''${key[Home]}   ]] && bindkey "''${key[Home]}"   beginning-of-line
+        [[ -n ''${key[End]}    ]] && bindkey "''${key[End]}"    end-of-line
+        [[ -n ''${key[Up]}     ]] && bindkey "''${key[Up]}"     history-beginning-search-backward
+        [[ -n ''${key[Down]}   ]] && bindkey "''${key[Down]}"   history-beginning-search-forward
+
         bindkey "^[[1;5C" emacs-forward-word    # Ctrl-Right
         bindkey "^[[1;5D" emacs-backward-word   # Ctrl-Left
         bindkey "^[[1;2C" emacs-forward-word    # Shift-Right
