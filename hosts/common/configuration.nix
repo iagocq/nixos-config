@@ -29,9 +29,8 @@
     vim htop file killall nethogs dnsutils coreutils lsof
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/124215
-  documentation.info.enable = false;
-
   # https://github.com/NixOS/nixpkgs/pull/85073
-  systemd.services.mount-pstore.enable = false;
+  # https://github.com/NixOS/nixpkgs/pull/123902
+  # https://github.com/NixOS/nixpkgs/pull/124431
+  # systemd.services.mount-pstore.enable = false;
 }
