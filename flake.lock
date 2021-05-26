@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1621794721,
-        "narHash": "sha256-JXfTSZUu9EVbT9D/MFsx0cXfa8bw1NFCzIxZ7gO73Uo=",
+        "lastModified": 1622014903,
+        "narHash": "sha256-tEXRBi5aMprNLbzMb6YmTy3cO9smvqC2udKyRo6rj2o=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "90493027e33ba9eb3f50dc1da365d0e4ca31bf14",
+        "rev": "b840707a87f6a35a5c24ea6edf8846741d924616",
         "type": "github"
       },
       "original": {
@@ -37,32 +37,15 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1621714816,
-        "narHash": "sha256-u6Rhw+1uwaTXThZWuySv9JPXzNuKI9Fmj36g4kb2Ojc=",
+        "lastModified": 1622021790,
+        "narHash": "sha256-/ytuGI/uJ6DA+ebU8wQV5jEnL1vpy+DFTGcxdOY9Ex8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "278bcdce1f0da616661a6205161b13bd89a2f3bf",
+        "rev": "005702524adc100172a77bd9ac902f1575c9ae01",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-master": {
-      "locked": {
-        "lastModified": 1621975130,
-        "narHash": "sha256-xky6zVWjYS0h6tuRk+T2iNPG5LJxqRuzSvrzaA+Zu5Q=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "0995d4e24d10257bc25dcc7d9f88653437c0a7eb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -70,11 +53,11 @@
     "nnn-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1621805172,
-        "narHash": "sha256-pLznvNQqCkfebIFbpNsQQMnmMGt6CmuZPkFoEAMlBC0=",
+        "lastModified": 1621979161,
+        "narHash": "sha256-DhEIHy16BLcIj4SNicUH7a/te2xP+KpP1gC0Fr294EU=",
         "owner": "jarun",
         "repo": "nnn",
-        "rev": "fdeba8a87ee9f8ef4d2465da9eb32e8b39c7d7f2",
+        "rev": "025b570e05a441a1cb8e4ba132fa6b2b656c8ea9",
         "type": "github"
       },
       "original": {
@@ -88,7 +71,6 @@
         "home-manager": "home-manager",
         "iago-nixpkgs": "iago-nixpkgs",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-master": "nixpkgs-master",
         "nnn-src": "nnn-src",
         "zsh-f-sy-h": "zsh-f-sy-h"
       }
