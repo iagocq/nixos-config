@@ -15,32 +15,34 @@
     nnn-src.flake = false;
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
   let
+    nixpkgs-config = { config.allowUnfree = true; };
     overlays = system:
     let
-      nixpkgs-config = { inherit system; config.allowUnfree = true; };
-      iago-nixpkgs = import inputs.iago-nixpkgs nixpkgs-config;
+      iago-nixpkgs = import inputs.iago-nixpkgs ({ inherit system; } // nixpkgs-config);
     in
     [
-      (final: prev: { zsh-f-sy-h = inputs.zsh-f-sy-h; })
-      (final: prev: { nnn-src = inputs.nnn-src; })
-      (final: prev: { adguardhome = iago-nixpkgs.adguardhome; })
+      (final: prev: {
+        zsh-f-sy-h = inputs.zsh-f-sy-h;
+        nnn-src = inputs.nnn-src;
+        adguardhome = iago-nixpkgs.adguardhome;
+      })
     ];
-    mkSystem = { host, system, extra-modules ? [], extra ? {}}: nixpkgs.lib.nixosSystem ({
-      inherit system;
+    mkSystem = { host, system, ... }@args: nixpkgs.lib.nixosSystem ({
       modules = [
-        (import ./hosts/common/overlay.nix (overlays system))
         (import (./hosts + "/${host}/configuration.nix"))
-        home-manager.nixosModules.home-manager {
+        { nixpkgs = { overlays = overlays system; } // nixpkgs-config; }
+        home-manager.nixosModules.home-manager
+        {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             users.iago = import (./home/iago + "/home-${host}.nix");
           };
         }
-      ] ++ extra-modules;
-    } // extra);
+      ] ++ (if (args ? modules) then args.modules else []);
+    } // (removeAttrs args [ "modules" "host" ]));
   in
   {
     nixosConfigurations = {
@@ -48,12 +50,12 @@
       raspberrypi  = mkSystem { host = "raspberrypi";  system = "aarch64-linux"; };
 
       # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
-      raspberrypi-sd-image = mkSystem rec {
+      raspberrypi-sd-image = mkSystem {
         host = "raspberrypi";
         system = "aarch64-linux";
-        extra-modules = [
-          (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix" )
-          ({ ... }: { sdImage.compressImage = false; })
+        modules = [
+          (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix")
+          { sdImage.compressImage = false; }
         ];
       };
     };

@@ -4,11 +4,9 @@ with lib;
 let
   cfg = config.common.nginx;
   s = config.common.secrets;
-  mkVhost = vhost: 
-    { extraConfig = cfg.sslExtraConfig
-        + (if builtins.hasAttr "extraConfig" vhost then vhost.extraConfig else ""); }
-    // cfg.ssl
-    // (lib.attrsets.filterAttrs (n: v: n != "extraConfig") vhost);
+  mkVhost = vhost: {
+    extraConfig = cfg.sslExtraConfig + (if (vhost ? extraConfig) vhost then vhost.extraConfig else "");
+  } // cfg.ssl // (removeAttrs vhost [ "extraConfig" ]);
 in
 {
   options.common.nginx = {
