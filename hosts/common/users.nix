@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  s = config.common.secrets;
+in
 {
   users = {
     defaultUserShell = pkgs.zsh;
@@ -8,10 +11,7 @@
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       home = "/home/iago-nixos";
-      openssh.authorizedKeys.keyFiles = [
-        ../../keys/iago-pc.pub
-        ../../keys/iago-rpi.pub
-      ];
+      openssh.authorizedKeys.keyFiles = s.keys.all-pub-ssh;
     };
   };
 
