@@ -5,7 +5,7 @@ let
   cfg = config.common.nginx;
   s = config.common.secrets;
   mkVhost = vhost: {
-    extraConfig = cfg.sslExtraConfig + (if (vhost ? extraConfig) vhost then vhost.extraConfig else "");
+    extraConfig = cfg.sslExtraConfig + (if (vhost ? extraConfig) then vhost.extraConfig else "");
   } // cfg.ssl // (removeAttrs vhost [ "extraConfig" ]);
 in
 {
