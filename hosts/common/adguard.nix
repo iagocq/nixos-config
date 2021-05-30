@@ -27,6 +27,7 @@ in
       enable = true;
       port = cfg.port;
       host = cfg.address;
+      extraArgs = [ "--no-etc-hosts" ];
     };
   };
 }

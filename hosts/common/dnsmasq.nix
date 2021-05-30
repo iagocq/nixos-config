@@ -41,6 +41,11 @@ in
       type = types.str;
       default = s.network.subnet;
     };
+
+    extra-config = mkOption {
+      type = types.lines;
+      default = s.network.dhcp.dnsmasq-extra;
+    };
   };
 
   config = {
@@ -57,8 +62,9 @@ in
         domain-needed
         bogus-priv
         no-resolv
+        no-hosts
         domain=${cfg.domain},${cfg.dhcp-subnet},local
-      '';
+      '' + cfg.extra-config;
     };
   };
 }
