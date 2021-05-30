@@ -116,6 +116,23 @@ in
           "resample.quality" = 1;
         };
       };
+      media-session.config.alsa-monitor.rules = [
+        {
+          "actions"."update-props" = {
+            "api.acp.auto-port" = false;
+            "api.acp.auto-profile" = false;
+            "api.alsa.use-acp" = true;
+          };
+          "matches" = [ { "device-name" = "~alsa_card.*"; } ];
+        }
+        {
+          "actions"."update-props" = {
+            "node.pause-on-idle" = false;
+            "api.alsa.headroom" = 1024;
+          };
+          "matches" = [ { "node.name" = "~alsa_input.*"; } { "node.name" = "~alsa_output.*"; } ];
+        }
+      ];
     };
 
     #environment.etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsaPlugins}/etc/alsa/conf.d/50-jack.conf";
