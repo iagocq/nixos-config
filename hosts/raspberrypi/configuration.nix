@@ -29,6 +29,7 @@ in
   common.nginx.bitwarden.enable = true;
   common.nginx.adguard.enable = true;
   common.nginx.adguard.betaPort = config.common.nginx.adguard.port + 1;
+  common.bind.enable = true;
 
   system.stateVersion = "20.09";
 }
