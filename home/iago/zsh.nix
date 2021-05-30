@@ -61,6 +61,7 @@ in
         if [[ -e "${zkbdkeymap}" ]]; then
           source "${zkbdkeymap}"
         else
+          autoload zkbd
           echo "Could not load keymap. Run zkbd to create one."
         fi
         
