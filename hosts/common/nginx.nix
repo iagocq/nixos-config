@@ -96,7 +96,7 @@ in
         default = config.common.adguard.port;
       };
 
-      betaPort = mkOption {
+      beta-port = mkOption {
         type = types.port;
         default = 0;
       };
@@ -141,8 +141,8 @@ in
           "/" = {
             proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.port}";
           };
-          "/beta/" = mkIf (cfg.adguard.betaPort != 0) {
-            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.betaPort}";
+          "/beta/" = mkIf (cfg.adguard.beta-port != 0) {
+            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.beta-port}";
           };
         };
       });

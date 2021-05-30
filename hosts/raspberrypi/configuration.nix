@@ -18,7 +18,7 @@ in
     routes = [ s.network.default-route ];
   };
   networking.nameservers = [ s.network.dns-server ];
-  networking.extraHosts = s.network.raspberrypi.extraHosts;
+  networking.extraHosts = s.network.raspberrypi.extra-hosts;
   networking.domain = s.network.intranet-domain;
 
   common.bitwarden_rs.enable = true;
@@ -28,8 +28,9 @@ in
   common.nginx.enable = true;
   common.nginx.bitwarden.enable = true;
   common.nginx.adguard.enable = true;
-  common.nginx.adguard.betaPort = config.common.nginx.adguard.port + 1;
+  common.nginx.adguard.beta-port = config.common.nginx.adguard.port + 1;
   common.bind.enable = true;
+  networking.resolvconf.useLocalResolver = false;
 
   system.stateVersion = "20.09";
 }
