@@ -5,6 +5,15 @@ with lib;
 let
   cfg = config.custom.i3;
   rofi-plugins = with pkgs; rofi.override { plugins = [ ]; };
+  mkColors = border: background: text: indicator: childBorder: { inherit background border childBorder indicator text; };
+  orange-1 = "#E6840E";
+  orange-2 = "#BA741E";
+  brown-1 = "#995605";
+  black-1 = "#0D0D0D";
+  black-2 = "#5f676a";
+  white-1 = "#FFFFFF";
+  gray-1 = "#666666";
+  gray-2 = "#888888";
 in
 {
   options.custom.i3 = {
@@ -57,11 +66,18 @@ in
       type = types.str;
       default = "${pkgs.dmenu}/bin/dmenu";
     };
+
+    polybar = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+      };
+    };
   };
 
-  config = {
+  config = mkIf cfg.enable {
 
-    xsession.windowManager.i3 = mkIf cfg.enable {
+    xsession.windowManager.i3 = {
       enable = true;
 
       config = {
@@ -72,7 +88,6 @@ in
         window.commands = [
           { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
           { criteria = { window_role = "task_dialog"; }; command = "floating enable"; }
-          { criteria = { class = ".*"; }; command = "border pixel 2"; }
           { criteria = { class = "chatterino"; title = ".*'s Usercard"; }; command = "floating enable"; }
           { criteria = { class = "chatterino"; title = "Searching in .* history"; }; command = "floating enable"; }
           { criteria = { class = "Firefox"; }; command = "move to workspace number ${cfg.web-ws}"; }
@@ -100,11 +115,40 @@ in
         gaps.inner = 10;
         gaps.smartGaps = true;
         gaps.smartBorders = "on";
+
+        window.border = 1;
+        floating.border = 1;
+
+        colors.focused         = mkColors orange-1 black-1 white-1 orange-1 orange-1;
+        colors.focusedInactive = mkColors orange-2 black-1 white-1 orange-2 orange-2;
+        colors.unfocused       = mkColors brown-1 black-1 white-1 brown-1 brown-1;
+
+        bars = [{
+          mode = "dock";
+          hiddenState = "hide";
+          position = "bottom";
+          workspaceButtons = true;
+          workspaceNumbers = true;
+          statusCommand = "${pkgs.i3status}/bin/i3status";
+          fonts = {
+            names = [ "monospace" ];
+            size = 8.0;
+          };
+          trayOutput = "primary";
+          colors = {
+            background = black-1;
+            statusline = white-1;
+            separator = gray-1;
+            focusedWorkspace = { border = brown-1; background = orange-2; text = white-1; };
+            activeWorkspace = { border = orange-2; background = black-2; text = gray-2; };
+          };
+        }];
+
+        workspaceAutoBackAndForth = false;
       };
 
       extraConfig = ''
         exec i3-msg workspace number ${cfg.start-ws}
-        workspace_auto_back_and_forth no
       '';
     };
 

@@ -31,6 +31,7 @@ in
   common.nginx.adguard.beta-port = config.common.nginx.adguard.port + 1;
   common.bind.enable = true;
   networking.resolvconf.useLocalResolver = false;
+  common.sslh.enable = true;
 
   system.stateVersion = "20.09";
 }

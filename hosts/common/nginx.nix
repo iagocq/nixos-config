@@ -6,6 +6,7 @@ let
   s = config.common.secrets;
   mkVhost = vhost: {
     extraConfig = cfg.sslExtraConfig + (if (vhost ? extraConfig) then vhost.extraConfig else "");
+    listen = cfg.listen-on;
   } // cfg.ssl // (removeAttrs vhost [ "extraConfig" ]);
 in
 {
@@ -26,6 +27,21 @@ in
         useACMEHost = cfg.domain;
         forceSSL = true;
       };
+    };
+
+    listen-on = mkOption {
+      type = types.anything;
+      default = [
+        { addr = "0.0.0.0"; port = 443; ssl = true; }
+        { addr = "0.0.0.0"; port = 80; }
+        { addr = "[::]"; port = 443; ssl = true; }
+        { addr = "[::]"; port = 80; }
+      ];
+    };
+
+    resolver-addresses = mkOption {
+      type = types.listOf types.str;
+      default = [ s.network.dns-server ];
     };
 
     sslExtraConfig = mkOption {
@@ -114,6 +130,7 @@ in
       recommendedGzipSettings = true;
       recommendedTlsSettings = true;
 
+      resolver.addresses = cfg.resolver-addresses;
       proxyResolveWhileRunning = true;
 
       virtualHosts.${cfg.bitwarden.domain} = mkIf cfg.bitwarden.enable (mkVhost {
@@ -146,6 +163,24 @@ in
           };
         };
       });
+
+      virtualHosts."${cfg.domain}" = mkVhost {
+        listen = [ { addr = "0.0.0.0"; port = 2; ssl = true; } ];
+        extraConfig = ''
+          error_page 497 https://$host:2$request_uri;
+        '';
+        locations = {
+          "/" = {
+            return = "307 https://$host:2/mapa/";
+          };
+          "/mapa/" = {
+            extraConfig = ''
+              rewrite /mapa/(.*) /$1 break;
+            '';
+            proxyPass = "http://s1.${cfg.domain}:8100";
+          };
+        };
+      };
     };
   };
 }

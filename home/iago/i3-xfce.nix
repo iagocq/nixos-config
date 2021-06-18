@@ -23,7 +23,9 @@ in
       keybindings = lib.mkOptionDefault {
         "${config.custom.i3.mod}+Shift+e" = "exec --no-startup-id xfce4-session-logout";
       };
-      window.commands = [ ];
+      window.commands = [
+        { criteria = { class = "Thunar"; }; command = "floating enable"; }
+      ];
     };
   };
 }

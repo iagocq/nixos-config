@@ -10,5 +10,6 @@
     ./dnsmasq.nix
     ./nginx.nix
     ./secrets.nix
+    ./sslh.nix
   ];
 }
