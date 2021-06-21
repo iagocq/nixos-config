@@ -4,19 +4,23 @@
 /* https://forum.peppermintos.com/index.php?topic=6808.0 */
 /* https://askubuntu.com/questions/1014560/how-to-remove-overlay-scrollbars-in-ubuntu-17-10-and-18-04 */
 
+/* for firefox 89+: set widget.non-native-theme.enabled to false */
+/* https://www.linuxquestions.org/questions/slackware-14/mozilla-firefox-89-0-x86_64-1-no-longer-applying-scrollbar-width-from-%27gtk-css%27-4175695877/ */
+
 scrollbar slider {
-	min-width: 12px;
-	min-height: 12px;
-	border-radius: 0px;
-	border: none;
+    min-width: 12px;
+    min-height: 12px;
+    border-radius: 0px;
+    border: none;
+    margin: 0px;
 }
 
 scrollbar.vertical slider {
-	min-height: 80px;
+    min-height: 80px;
 }
 
 scrollbar.horizontal slider {
-	min-width: 80px;
+    min-width: 80px;
 }
 
 /* Works, but I like  the unmodified color */
@@ -28,5 +32,5 @@ scrollbar slider:hover {
 */
 
 scrollbar slider:active {
-        background-color: #404040;
+    background-color: #404040;
 }
