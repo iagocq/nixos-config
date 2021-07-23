@@ -3,7 +3,7 @@
 
   inputs = {
     iago-nixpkgs.url = "github:iagocq/nixpkgs";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
