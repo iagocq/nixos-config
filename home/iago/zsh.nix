@@ -105,8 +105,14 @@ in
           LESS_TERMCAP_ue=$'\e[0m' \
           LESS_TERMCAP_us=$'\e[01;32m' \
           command man "$@"
-        };
+        }
 
+        flakify() {
+          template=''${1:-generic}
+          nix flake new -t "github:iagocq/nix-templates#$template" .
+          direnv allow
+          ''${EDITOR:-vim} flake.nix
+        }
       '';
 
       plugins = cfg.plugins;
