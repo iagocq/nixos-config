@@ -76,6 +76,7 @@
       src = pkgs.zsh-f-sy-h.outPath;
     }
   ];
+  custom.direnv.enable = true;
 
   programs.firefox = {
     enable = true;

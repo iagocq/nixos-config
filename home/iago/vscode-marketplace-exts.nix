@@ -125,5 +125,11 @@
     version = "1.0.1";
     sha256 = "13fvv7g1ignky8yf48xykyhj1mxsrqdy4jn78n9l0d47hfmsc3q6";
   }
+  {
+    name = "zls-vscode";
+    publisher = "AugusteRame";
+    version = "1.0.4";
+    sha256 = "sha256-Mb2RFRjD6+iw+ZaoMc/O3FU128bl9pGg07jPDDxrZtk=";
+  }
 ];
 }

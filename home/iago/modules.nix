@@ -3,6 +3,7 @@
 {
   imports = [
     ./alacritty.nix
+    ./direnv.nix
     ./i3.nix
     ./i3-xfce.nix
     ./mpv.nix
