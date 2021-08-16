@@ -83,13 +83,18 @@ in
         # PROMPT description
         # [%F{green}%D{%H:%M}%f] - put the time between brackets in green
         # %F{yellow}%~%f         - current working directory in yellow
+        # %{$([ -z ''${DIRENV_DIR+x} ] || { echo -n " %B(direnv)%b"; echo -n "%9G" })%} - very convoluted way to test for a direnv variable
+        #                                                                               - to correctly print "(direnv)"
         # %(?.. %F{red}%?%f)     - status code of the last command if non-zero in red
         # %B%F{red}%n%f%b        - bold red username
         # %B%F{red}%m%f%b        - bold red hostname
         # %#                     - % or #
-      
+        
+        # enables command substitution inside the prompt string
+        setopt promptsubst
+
         PROMPT='
-        [%F{green}%D{%H:%M}%f] %F{yellow}%~%f%(?.. %F{red}%?%f)
+        [%F{green}%D{%H:%M}%f] %F{yellow}%~%{$([ -z ''${DIRENV_DIR+x} ] || { echo -n " %B(direnv)%b"; echo -n "%9G" })%}%(?.. %F{red}%?)%f
         %B%F{red}%n%f%b@%B%F{red}%m%f%b%# '
 
         man() {
