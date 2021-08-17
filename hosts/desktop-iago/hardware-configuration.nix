@@ -9,7 +9,7 @@
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" "snd-aloop" ];
   boot.kernelParams = [ "snd-aloop.index=10" "threadirqs" ];
-  boot.extraModulePackages = [ ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.kernel.sysctl = {
     "vm.swappiness" = 10;
     "dev.hpet.max-user-freq" = 3072;
