@@ -27,6 +27,8 @@
     vim htop file killall nethogs dnsutils coreutils lsof
   ];
 
+  environment.shells = [ pkgs.zsh ];
+
   # https://github.com/NixOS/nixpkgs/pull/85073
   # https://github.com/NixOS/nixpkgs/pull/123902
   # https://github.com/NixOS/nixpkgs/pull/124431
