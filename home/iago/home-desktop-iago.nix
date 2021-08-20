@@ -13,6 +13,7 @@
     carla
     #ungoogled-chromium
     multimc ripcord
+    openttd
 
     # Command line applications
     youtube-dl ffmpeg-full calc git
