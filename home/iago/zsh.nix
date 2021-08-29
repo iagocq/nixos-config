@@ -34,7 +34,7 @@ in
     programs.zsh = mkIf cfg.enable {
       enable = true;
       enableCompletion = true;
-      enableVteIntegration = true;
+      enableVteIntegration = false;
       dotDir = cfg.dot-dir;
       history = {
         extended = true;
