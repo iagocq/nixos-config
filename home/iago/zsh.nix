@@ -109,7 +109,7 @@ in
 
         flakify() {
           template=''${1:-generic}
-          nix flake new -t "github:iagocq/nix-templates#$template" .
+          nix flake new -t "github:iagocq/nix#$template" .
           direnv allow
           ''${EDITOR:-vim} flake.nix
         }
