@@ -17,7 +17,7 @@
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
   let
-    nixpkgs-config = { config.allowUnfree = true; };
+    nixpkgs-config = { config.allowUnfree = true; config.vim.gui = false; };
     overlays = system:
     let
       iago-nixpkgs = import inputs.iago-nixpkgs ({ inherit system; } // nixpkgs-config);
@@ -48,6 +48,9 @@
     nixosConfigurations = {
       desktop-iago = mkSystem { host = "desktop-iago"; system = "x86_64-linux"; };
       raspberrypi  = mkSystem { host = "raspberrypi";  system = "aarch64-linux"; };
+
+      # nix build .#nixosConfigurations.wsl.config.system.build.tarball
+      wsl          = mkSystem { host = "wsl";          system = "x86_64-linux"; };
 
       # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
       raspberrypi-sd-image = mkSystem {
