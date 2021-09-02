@@ -20,14 +20,32 @@ in
       type = types.str;
       default = "127.0.0.1";
     };
+
+    vhost = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    domain = mkOption {
+      type = types.str;
+      default = "ad.${config.common.nginx.domain}";
+    };
   };
 
-  config = {
-    services.adguardhome = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    services.adguardhome = {
       enable = true;
       port = cfg.port;
       host = cfg.address;
       extraArgs = [ "--no-etc-hosts" ];
+    };
+
+    common.nginx.vhosts.${cfg.domain} = mkIf cfg.adguard.vhost {
+      locations = {
+        "/" = {
+          proxyPass = "http://${cfg.address}:${toString cfg.port}";
+        };
+      };
     };
   };
 }

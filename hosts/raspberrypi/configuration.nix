@@ -26,12 +26,11 @@ in
   common.acme.enable = true;
   common.dnsmasq.enable = true;
   common.nginx.enable = true;
-  common.nginx.bitwarden.enable = true;
-  common.nginx.adguard.enable = true;
-  common.nginx.adguard.beta-port = config.common.nginx.adguard.port + 1;
   common.bind.enable = true;
   networking.resolvconf.useLocalResolver = false;
   common.sslh.enable = true;
+  common.lightspeed.enable = true;
+  common.lightspeed.webrtc.ws-port = 8090;
 
   system.stateVersion = "20.09";
 }

@@ -44,6 +44,11 @@ in
       default = [ s.network.dns-server ];
     };
 
+    dynamic-resolving = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
     sslExtraConfig = mkOption {
       type = types.str;
       default = ''
@@ -54,68 +59,14 @@ in
       '';
     };
 
-    dhparams = mkOption {
+    vhosts = mkOption {
+      type = types.attrsOf types.anything;
+      default = { };
+    };
+
+    group = mkOption {
       type = types.str;
-      default = null;
-    };
-
-    bitwarden = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-
-      domain = mkOption {
-        type = types.str;
-        default = "bw.${cfg.domain}";
-      };
-
-      address = mkOption {
-        type = types.str;
-        default = config.common.bitwarden_rs.config.rocketAddress;
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = config.common.bitwarden_rs.config.rocketPort;
-      };
-
-      ws-address = mkOption {
-        type = types.str;
-        default = config.common.bitwarden_rs.config.websocketAddress;
-      };
-
-      ws-port = mkOption {
-        type = types.port;
-        default = config.common.bitwarden_rs.config.websocketPort;
-      };
-    };
-
-    adguard = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-      };
-
-      domain = mkOption {
-        type = types.str;
-        default = "ad.${cfg.domain}";
-      };
-
-      address = mkOption {
-        type = types.str;
-        default = config.common.adguard.address;
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = config.common.adguard.port;
-      };
-
-      beta-port = mkOption {
-        type = types.port;
-        default = 0;
-      };
+      default = "acme";
     };
   };
 
@@ -123,64 +74,34 @@ in
     services.nginx = mkIf cfg.enable {
       enable = true;
 
-      group = "acme";
+      group = cfg.group;
 
       recommendedProxySettings = true;
       recommendedOptimisation = true;
       recommendedGzipSettings = true;
       recommendedTlsSettings = true;
 
-      resolver.addresses = cfg.resolver-addresses;
-      proxyResolveWhileRunning = true;
+      resolver.addresses = mkIf cfg.dynamic-resolving cfg.resolver-addresses;
+      proxyResolveWhileRunning = mkDefault cfg.dynamic-resolving;
 
-      virtualHosts.${cfg.bitwarden.domain} = mkIf cfg.bitwarden.enable (mkVhost {
-        locations = {
-          "/" = {
-            proxyPass = "http://${cfg.bitwarden.address}:${toString cfg.bitwarden.port}";
-          };
-
-          "/notifications/hub" = {
-            proxyPass = "http://${cfg.bitwarden.ws-address}:${toString cfg.bitwarden.ws-port}";
-            extraConfig = ''
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection "upgrade";
-            '';
-          };
-
-          "/notifications/negotiate" = {
-            proxyPass = "http://${cfg.bitwarden.address}:${toString cfg.bitwarden.port}";
+      virtualHosts = {
+        ${cfg.domain} = mkVhost {
+          extraConfig = ''
+            error_page 497 https://$host$request_uri;
+          '';
+          locations = {
+            "/" = {
+              return = "307 https://$host/mapa/";
+            };
+            "/mapa/" = {
+              extraConfig = ''
+                rewrite /mapa/(.*) /$1 break;
+              '';
+              proxyPass = "http://s1.${cfg.domain}:8100";
+            };
           };
         };
-      });
-
-      virtualHosts.${cfg.adguard.domain} = mkIf cfg.adguard.enable (mkVhost {
-        locations = {
-          "/" = {
-            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.port}";
-          };
-          "/beta/" = mkIf (cfg.adguard.beta-port != 0) {
-            proxyPass = "http://${cfg.adguard.address}:${toString cfg.adguard.beta-port}";
-          };
-        };
-      });
-
-      virtualHosts."${cfg.domain}" = mkVhost {
-        listen = [ { addr = "0.0.0.0"; port = 2; ssl = true; } ];
-        extraConfig = ''
-          error_page 497 https://$host:2$request_uri;
-        '';
-        locations = {
-          "/" = {
-            return = "307 https://$host:2/mapa/";
-          };
-          "/mapa/" = {
-            extraConfig = ''
-              rewrite /mapa/(.*) /$1 break;
-            '';
-            proxyPass = "http://s1.${cfg.domain}:8100";
-          };
-        };
-      };
+      } // builtins.mapAttrs (name: value: mkVhost value) cfg.vhosts;
     };
   };
 }

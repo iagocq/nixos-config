@@ -18,7 +18,7 @@ in
         websocketAddress = "127.0.0.1";
         websocketPort = 3012;
         signupsAllowed = false;
-        domain = cfg.domain;
+        domain = "https://${cfg.domain}";
         rocketAddress = "127.0.0.1";
         rocketPort = 8222;
       };
@@ -26,14 +26,35 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = "https://${config.common.nginx.bitwarden.domain}";
+      default = "bw.${config.common.nginx.domain}";
+    };
+
+    vhost = mkOption {
+      type = types.bool;
+      default = true;
     };
   };
 
-  config = {
-    services.bitwarden_rs = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    services.vaultwarden = {
       enable = true;
       config = cfg.config;
+    };
+
+    common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
+      locations = {
+        "/" = {
+          proxyPass = "http://${cfg.config.rocketAddress}:${toString cfg.config.rocketPort}";
+        };
+
+        "/notifications/hub" = mkIf cfg.config.websocketEnabled {
+          proxyPass = "http://${cfg.config.websocketAddress}:${toString cfg.websocketPort}";
+          extraConfig = ''
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          '';
+        };
+      };
     };
   };
 }

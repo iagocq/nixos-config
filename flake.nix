@@ -2,6 +2,7 @@
   description = "Iago's NixOS system configuration flake";
 
   inputs = {
+    iago-nix.url = "github:iagocq/nix";
     iago-nixpkgs.url = "github:iagocq/nixpkgs";
     nixpkgs.url = "github:NixOS/nixpkgs";
 
@@ -18,6 +19,7 @@
   outputs = { nixpkgs, home-manager, ... }@inputs:
   let
     nixpkgs-config = { config.allowUnfree = true; config.vim.gui = false; };
+
     overlays = system:
     let
       iago-nixpkgs = import inputs.iago-nixpkgs ({ inherit system; } // nixpkgs-config);
@@ -28,7 +30,9 @@
         nnn-src = inputs.nnn-src;
         adguardhome = iago-nixpkgs.adguardhome;
       })
+      inputs.iago-nix.overlay
     ];
+
     mkSystem = { host, system, ... }@args: nixpkgs.lib.nixosSystem ({
       modules = [
         (import (./hosts + "/${host}/configuration.nix"))
@@ -41,7 +45,8 @@
             users.iago = import (./home/iago + "/home-${host}.nix");
           };
         }
-      ] ++ (if (args ? modules) then args.modules else []);
+      ] ++ nixpkgs.lib.attrsets.attrValues inputs.iago-nix.nixosModules
+        ++ (if (args ? modules) then args.modules else []);
     } // (removeAttrs args [ "modules" "host" ]));
   in
   {
