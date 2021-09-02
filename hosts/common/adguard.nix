@@ -40,7 +40,7 @@ in
       extraArgs = [ "--no-etc-hosts" ];
     };
 
-    common.nginx.vhosts.${cfg.domain} = mkIf cfg.adguard.vhost {
+    common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
       locations = {
         "/" = {
           proxyPass = "http://${cfg.address}:${toString cfg.port}";

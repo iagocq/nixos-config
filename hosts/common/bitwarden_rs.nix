@@ -48,7 +48,7 @@ in
         };
 
         "/notifications/hub" = mkIf cfg.config.websocketEnabled {
-          proxyPass = "http://${cfg.config.websocketAddress}:${toString cfg.websocketPort}";
+          proxyPass = "http://${cfg.config.websocketAddress}:${toString cfg.config.websocketPort}";
           extraConfig = ''
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
