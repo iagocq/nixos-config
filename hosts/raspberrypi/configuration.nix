@@ -28,7 +28,6 @@ in
   common.nginx.enable = true;
   common.bind.enable = true;
   networking.resolvconf.useLocalResolver = false;
-  common.sslh.enable = true;
   common.lightspeed.enable = true;
   common.lightspeed.webrtc.ws-port = 8090;
 
