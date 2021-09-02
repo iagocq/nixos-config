@@ -42,11 +42,11 @@ in
       webrtc = {
         address = mkOption {
           type = types.str;
-          default = "localhost";
+          default = "0.0.0.0";
         };
         
         webrtc-address = mkOption {
-          default = "127.0.0.1";
+          default = s.lightspeed.address;
           type = types.str;
         };
 
@@ -87,7 +87,7 @@ in
         "/config.json" = {
           root = "/";
           tryFiles = (format.generate "config.json" {
-            wsUrl = "ws://127.0.0.1/websocket";
+            wsUrl = "wss://${cfg.domain}/websocket";
           }).outPath + " =404";
         };
 
@@ -96,6 +96,7 @@ in
           extraConfig = ''
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
+            proxy_read_timeout 1d;
           '';
         };
       };
