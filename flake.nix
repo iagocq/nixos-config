@@ -40,11 +40,12 @@
         (import (./hosts + "/${host}/configuration.nix"))
         home-manager.nixosModules.home-manager
         {
+          networking.hostName = host;
+
           nixpkgs = lib.attrsets.recursiveUpdate ({
             overlays = overlays system;
           } // nixpkgs-config) nixpkgs;
-        }
-        {
+
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
