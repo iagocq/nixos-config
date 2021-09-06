@@ -7,7 +7,7 @@ let
 in
 {
   imports = [
-    ../common/configuration.nix
+    ../configuration.nix
     ./build-tarball.nix
 
     "${modulesPath}/profiles/minimal.nix"

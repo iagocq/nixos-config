@@ -21,7 +21,7 @@ let
     nix-only = builtins.filter (x: strings.hasSuffix ".nix" x) (builtins.attrNames contents);
   in
     builtins.listToAttrs (map (file: {
-      name = builtins.substring 0 ((builtins.stringLength file) - 4) file;
+      name = lib.strings.removeSuffix ".nix" file;
       value = mkSecret file;
     }) nix-only);
 

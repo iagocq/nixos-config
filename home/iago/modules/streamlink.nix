@@ -13,8 +13,10 @@ in
     };
   };
 
-  config = {
-    xdg.configFile = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    home.packages = [ pkgs.streamlink ];
+
+    xdg.configFile = {
       "streamlink/config".text = ''
         player=mpv
         player-no-close

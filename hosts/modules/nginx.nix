@@ -64,14 +64,24 @@ in
       default = { };
     };
 
+    extra-config = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
+
     group = mkOption {
       type = types.str;
       default = "acme";
     };
+
+    open-firewall = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
-  config = {
-    services.nginx = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    services.nginx = {
       enable = true;
 
       group = cfg.group;
@@ -84,24 +94,15 @@ in
       resolver.addresses = mkIf cfg.dynamic-resolving cfg.resolver-addresses;
       proxyResolveWhileRunning = mkDefault cfg.dynamic-resolving;
 
-      virtualHosts = {
+      virtualHosts = lib.recursiveUpdate {
         ${cfg.domain} = mkVhost {
           extraConfig = ''
             error_page 497 https://$host$request_uri;
-          '';
-          locations = {
-            "/" = {
-              return = "307 https://$host/mapa/";
-            };
-            "/mapa/" = {
-              extraConfig = ''
-                rewrite /mapa/(.*) /$1 break;
-              '';
-              proxyPass = "http://s1.${cfg.domain}:8100";
-            };
-          };
+          '' + toString cfg.extra-config;
         };
-      } // builtins.mapAttrs (name: value: mkVhost value) cfg.vhosts;
+      } (builtins.mapAttrs (name: value: mkVhost value) cfg.vhosts);
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.open-firewall (map (x: x.port) cfg.listen-on);
   };
 }

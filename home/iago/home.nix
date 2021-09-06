@@ -1,17 +1,17 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
-    ./modules.nix
+    ./modules
   ];
 
   home.packages = with pkgs; [
-    calc git
+    calc git git-crypt
+    neofetch
     zip unzip p7zip unar atool
     man-pages posix_man_pages
-    screen
+    screen tmux
     nnn
-    git-crypt
   ];
 
   home.sessionVariables = {
@@ -31,14 +31,4 @@
 
   home.username = "iago";
   home.homeDirectory = "/home/iago-nixos";
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "21.03";
 }

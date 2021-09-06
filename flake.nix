@@ -18,7 +18,9 @@
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
   let
-    nixpkgs-config = { config.allowUnfree = true; config.vim.gui = false; };
+    lib = nixpkgs.lib;
+
+    nixpkgs-config = { config.allowUnfree = true; };
 
     overlays = system:
     let
@@ -33,32 +35,35 @@
       inputs.iago-nix.overlay
     ];
 
-    mkSystem = { host, system, ... }@args: nixpkgs.lib.nixosSystem ({
+    mkSystem = { host, system, modules ? [], nixpkgs ? {}, ... }@args: lib.nixosSystem ({
       modules = [
         (import (./hosts + "/${host}/configuration.nix"))
-        { nixpkgs = { overlays = overlays system; } // nixpkgs-config; }
         home-manager.nixosModules.home-manager
+        {
+          nixpkgs = lib.attrsets.recursiveUpdate ({
+            overlays = overlays system;
+          } // nixpkgs-config) nixpkgs;
+        }
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users.iago = import (./home/iago + "/home-${host}.nix");
+            users.iago = import (./home/iago + "/${host}/home.nix");
           };
         }
-      ] ++ nixpkgs.lib.attrsets.attrValues inputs.iago-nix.nixosModules
-        ++ (if (args ? modules) then args.modules else []);
-    } // (removeAttrs args [ "modules" "host" ]));
+      ] ++ lib.attrsets.attrValues inputs.iago-nix.nixosModules
+        ++ modules;
+    } // (removeAttrs args [ "host" "modules" "nixpkgs" ]));
   in
   {
     nixosConfigurations = {
-      desktop-iago = mkSystem { host = "desktop-iago"; system = "x86_64-linux"; };
-      raspberrypi  = mkSystem { host = "raspberrypi";  system = "aarch64-linux"; };
-
-      # nix build .#nixosConfigurations.wsl.config.system.build.tarball
-      wsl          = mkSystem { host = "wsl";          system = "x86_64-linux"; };
-
-      # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
-      raspberrypi-sd-image = mkSystem {
+      desktop-iago = mkSystem {
+        host = "desktop-iago";
+        system = "x86_64-linux";
+      };
+      
+      # nix build .#nixosConfigurations.raspberrypi.config.system.build.sdImage
+      raspberrypi = mkSystem {
         host = "raspberrypi";
         system = "aarch64-linux";
         modules = [
@@ -66,18 +71,13 @@
           { sdImage.compressImage = false; }
         ];
       };
-    };
 
-    homeConfigurations = {
-      "iago@raspberrypi" = home-manager.lib.homeManagerConfiguration rec {
-        system = "aarch64-linux";
-        username = "iago";
-        configuration = ./home/iago/home-rpi.nix;
-        homeDirectory = "/home/iago";
-        pkgs = import nixpkgs {
-          overlays = overlays system;
-          config.allowUnfree = true;
-          system = system;
+      # nix build .#nixosConfigurations.wsl.config.system.build.tarball
+      wsl = mkSystem {
+        host = "wsl";
+        system = "x86_64-linux";
+        nixpkgs = {
+          config.vim.gui = false;
         };
       };
     };

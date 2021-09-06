@@ -6,10 +6,16 @@
 
 {
   imports = [
-    ../common/pc.nix
+    ../pc.nix
 
     ./hardware-configuration.nix
   ];
+
+  networking = {
+    firewall.enable = false;
+    wireless.enable = false;
+    interfaces.enp8s0.useDHCP = true;
+  };
 
   services.xserver = {
     enable = true;
@@ -37,11 +43,6 @@
   virtualisation.docker.enable = true;
 
   programs.gnupg.agent.enable = true;
-
-  networking.hostName = "desktop-iago";
-  networking.firewall.enable = false;
-  networking.wireless.enable = false;
-  networking.interfaces.enp8s0.useDHCP = true;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 

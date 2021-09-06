@@ -30,6 +30,16 @@ in
       type = types.str;
       default = "ad.${config.common.nginx.domain}";
     };
+
+    base-uri = mkOption {
+      type = types.str;
+      default = "/";
+    };
+
+    open-firewall = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -42,10 +52,12 @@ in
 
     common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
       locations = {
-        "/" = {
+        ${cfg.base-uri} = {
           proxyPass = "http://${cfg.address}:${toString cfg.port}";
         };
       };
     };
+
+    networking.firewall.allowedUDPPorts = [ 53 ];
   };
 }

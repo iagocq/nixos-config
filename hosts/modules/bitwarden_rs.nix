@@ -33,6 +33,11 @@ in
       type = types.bool;
       default = true;
     };
+
+    base-uri = mkOption {
+      type = types.str;
+      default = "/";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -43,11 +48,11 @@ in
 
     common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
       locations = {
-        "/" = {
+        "${cfg.base-uri}" = {
           proxyPass = "http://${cfg.config.rocketAddress}:${toString cfg.config.rocketPort}";
         };
 
-        "/notifications/hub" = mkIf cfg.config.websocketEnabled {
+        "${cfg.base-uri}notifications/hub" = mkIf cfg.config.websocketEnabled {
           proxyPass = "http://${cfg.config.websocketAddress}:${toString cfg.config.websocketPort}";
           extraConfig = ''
             proxy_set_header Upgrade $http_upgrade;

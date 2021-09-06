@@ -8,58 +8,61 @@ let
   format = pkgs.formats.json {};
 in
 {
-  options = {
-    common.lightspeed = {
-      enable = mkEnableOption "";
+  options.common.lightspeed = {
+    enable = mkEnableOption "";
 
-      domain = mkOption {
+    domain = mkOption {
+      type = types.str;
+      default = "ls.${config.common.nginx.domain}";
+    };
+
+    vhost = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.lightspeed-react;
+    };
+
+    ingest = {
+      stream-key = mkOption {
         type = types.str;
-        default = "ls.${config.common.nginx.domain}";
+        default = s.lightspeed.stream-key;
       };
 
-      vhost = mkOption {
-        type = types.bool;
-        default = true;
+      ingest-address = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+      };
+    };
+
+    webrtc = {
+      address = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+      };
+      
+      webrtc-address = mkOption {
+        type = types.str;
+        default = s.lightspeed.address;
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lightspeed-react;
+      webrtc-ports = mkOption {
+        type = types.attrsOf types.port;
+        default = { from = 20000; to = 20500; };
       };
 
-      ingest = {
-        stream-key = mkOption {
-          type = types.str;
-          default = s.lightspeed.stream-key;
-        };
-
-        ingest-address = mkOption {
-          type = types.str;
-          default = "0.0.0.0";
-        };
+      ws-port = mkOption {
+        type = types.port;
+        default = 8080;
       };
+    };
 
-      webrtc = {
-        address = mkOption {
-          type = types.str;
-          default = "0.0.0.0";
-        };
-        
-        webrtc-address = mkOption {
-          default = s.lightspeed.address;
-          type = types.str;
-        };
-
-        webrtc-ports = mkOption {
-          default = "20000-20500";
-          type = types.str;
-        };
-
-        ws-port = mkOption {
-          default = 8080;
-          type = types.port;
-        };
-      };
+    open-firewall = mkOption {
+      type = types.bool;
+      default = true;
     };
   };
 
@@ -100,6 +103,11 @@ in
           '';
         };
       };
+    };
+
+    networking.firewall = mkIf cfg.open-firewall {
+      allowedUDPPortRanges = [ cfg.webrtc.webrtc-ports ];
+      allowedUDPPorts = [ 65535 ];
     };
   };
 }

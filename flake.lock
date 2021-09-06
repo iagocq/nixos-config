@@ -22,11 +22,11 @@
     },
     "iago-nix": {
       "locked": {
-        "lastModified": 1630602790,
-        "narHash": "sha256-5ib0XVzmt3U4CUELNm2u10Cp7j3RiM95N2+rRN5hsuo=",
+        "lastModified": 1630927717,
+        "narHash": "sha256-cyBoFH2hX9Fs1wdK3BArOmQQ/Qfwby82YSu92TEDypI=",
         "owner": "iagocq",
         "repo": "nix",
-        "rev": "4c0d5ccbb8335caf180452e562887f0694d6d751",
+        "rev": "f44524c66f7e57919e771f657bd79751fd2a018e",
         "type": "github"
       },
       "original": {

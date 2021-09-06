@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./modules.nix
+    ../home.nix
   ];
 
   home.packages = with pkgs; [
@@ -40,14 +40,8 @@
     adoptopenjdk-hotspot-bin-8
     android-studio apktool dex2jar jd-gui
 
-    (import ./vscode-with-exts.nix { pkg = pkgs.vscodium; inherit pkgs; } )
-
     calf rnnoise-plugin x42-plugins
   ];
-
-  home.sessionVariables = {
-    NNN_OPENER = "${pkgs.nnn-src}/plugins/nuke";
-  };
 
   custom.alacritty.enable = true;
   custom.terminal.cmd = config.custom.alacritty.cmd;
@@ -60,35 +54,17 @@
       feh=${pkgs.feh}/bin/feh \
       xdotool=${pkgs.xdotool}/bin/xdotool \
       xclip=${pkgs.xclip}/bin/xclip \
-      ${./sh/screenshot.sh} \
+      ${./screenshot.sh} \
     '';
-    login = "${./sh/login.sh}";
+    login = "${./login.sh}";
   };
+
   custom.picom.enable = true;
   custom.mpv.enable = true;
-  custom.readline.enable = true;
   custom.streamlink.enable = true;
-  custom.vim.enable = true;
-  custom.shell.enable = true;
-  custom.zsh.enable = true;
-  custom.zsh.plugins = [
-    {
-      name = "fast-syntax-highlighting";
-      src = pkgs.zsh-f-sy-h.outPath;
-    }
-  ];
   custom.direnv.enable = true;
-
-  programs.firefox = {
-    enable = true;
-    profiles.iago = {
-      isDefault = true;
-      userChrome = builtins.readFile ./firefox/userChrome.css;
-    };
-  };
-
-  home.username = "iago";
-  home.homeDirectory = "/home/iago-nixos";
+  custom.vscode.enable = true;
+  custom.firefox.enable = true;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

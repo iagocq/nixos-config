@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./modules.nix
+    ./modules
 
     ./users.nix
     ./ssh.nix

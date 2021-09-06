@@ -5,31 +5,44 @@ let
 in
 {
   imports = [
-    ../common/configuration.nix
+    ../configuration.nix
 
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = "raspberrypi";
-  networking.firewall.enable = false;
-  networking.wireless.enable = false;
-  networking.interfaces.eth0.ipv4 = {
-    addresses = s.network.raspberrypi.addresses;
-    routes = [ s.network.default-route ];
+  
+  networking = {
+    firewall.enable = true;
+    wireless.enable = false;
+    interfaces.eth0.ipv4 = {
+      addresses = s.network.raspberrypi.addresses;
+      routes = [ s.network.default-route ];
+    };
+    nameservers = [ s.network.dns-server ];
+    extraHosts = s.network.raspberrypi.extra-hosts;
+    domain = s.network.intranet-domain;
+    resolvconf.useLocalResolver = false;
   };
-  networking.nameservers = [ s.network.dns-server ];
-  networking.extraHosts = s.network.raspberrypi.extra-hosts;
-  networking.domain = s.network.intranet-domain;
 
-  common.bitwarden_rs.enable = true;
-  common.adguard.enable = true;
-  common.acme.enable = true;
-  common.dnsmasq.enable = true;
-  common.nginx.enable = true;
-  common.bind.enable = true;
-  networking.resolvconf.useLocalResolver = false;
-  common.lightspeed.enable = true;
-  common.lightspeed.webrtc.ws-port = 8090;
+  common = {
+    bitwarden_rs = {
+      enable = true;
+      base-uri = "/bitwarden/";
+      domain = config.common.nginx.domain;
+    };
+
+    adguard = {
+      enable = true;
+      base-uri = "/adguard/";
+      domain = config.common.nginx.domain;
+    };
+
+    acme.enable = true;
+    dnsmasq.enable = true;
+    nginx.enable = true;
+    bind.enable = true;
+    lightspeed.enable = true;
+    lightspeed.webrtc.ws-port = 8090;
+  };
 
   system.stateVersion = "20.09";
 }
