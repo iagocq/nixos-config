@@ -46,10 +46,15 @@ in
       type = types.lines;
       default = s.network.dhcp.dnsmasq-extra;
     };
+
+    open-firewall = mkOption {
+      type = types.bool;
+      default = true;
+    };
   };
 
-  config = {
-    services.dnsmasq = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    services.dnsmasq = {
       enable = true;
       resolveLocalQueries = false;
       extraConfig = ''
@@ -66,5 +71,7 @@ in
         domain=${cfg.domain},${cfg.dhcp-subnet},local
       '' + cfg.extra-config;
     };
+
+    networking.firewall.allowedUDPPorts = mkIf cfg.open-firewall [ 67 ];
   };
 }

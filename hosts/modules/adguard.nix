@@ -53,7 +53,8 @@ in
     common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
       locations = {
         ${cfg.base-uri} = {
-          proxyPass = "http://${cfg.address}:${toString cfg.port}";
+          proxyPass = "http://${cfg.address}:${toString cfg.port}/";
+          extraConfig = "proxy_redirect / ${cfg.base-uri};";
         };
       };
     };

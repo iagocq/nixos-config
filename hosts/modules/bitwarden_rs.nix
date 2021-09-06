@@ -18,7 +18,7 @@ in
         websocketAddress = "127.0.0.1";
         websocketPort = 3012;
         signupsAllowed = false;
-        domain = "https://${cfg.domain}";
+        domain = "https://${cfg.domain}${cfg.base-uri}";
         rocketAddress = "127.0.0.1";
         rocketPort = 8222;
       };
