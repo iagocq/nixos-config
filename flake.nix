@@ -63,13 +63,22 @@
         system = "x86_64-linux";
       };
       
-      # nix build .#nixosConfigurations.raspberrypi.config.system.build.sdImage
       raspberrypi = mkSystem {
+        host = "raspberrypi";
+        system = "aarch64-linux";
+      };
+
+      # nix build .#nixosConfigurations.raspberrypi.config.system.build.sdImage
+      raspberrpypi-sd-image = mkSystem {
         host = "raspberrypi";
         system = "aarch64-linux";
         modules = [
           (import "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix")
-          { sdImage.compressImage = false; }
+          {
+            users.users.iago.initialHashedPassword = "";
+            services.getty.autologinUser = lib.mkForce "iago";
+            sdImage.compressImage = false;
+          }
         ];
       };
 
