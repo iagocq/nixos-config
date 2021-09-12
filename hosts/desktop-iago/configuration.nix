@@ -40,6 +40,19 @@
 
   common.audio.quantum = 256;
 
+  common = {
+    nginx = {
+      enable = true;
+      domain = "ng.localhost";
+      ssl = { };
+      sslExtraConfig = "";
+      listen-on = [ { addr = "127.0.0.1"; port = 80; } ];
+    };
+    calibre.enable = true;
+  };
+
+  services.nginx.group = lib.mkForce "nginx";
+
   virtualisation.docker.enable = true;
 
   programs.gnupg.agent.enable = true;

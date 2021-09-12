@@ -10,7 +10,8 @@
     tdesktop discord qbittorrent vlc mpv
     obs-studio logisim feh chatterino2
     lutris steam qjackctl pavucontrol
-    carla
+    carla calibre
+
     #ungoogled-chromium
     multimc ripcord
     openttd

@@ -8,6 +8,7 @@ with lib;
     ./audio.nix
     ./bind.nix
     ./bitwarden_rs.nix
+    ./calibre.nix
     ./dnsmasq.nix
     ./lightspeed.nix
     ./nginx.nix
