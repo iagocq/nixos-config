@@ -38,7 +38,7 @@ in
     nginx = {
       enable = true;
       dynamic-resolving = false;
-      extra-config = "client_max_body_size 200m;";
+      extra-config = [ "client_max_body_size 200m;" ];
     };
 
     acme.enable = true;
