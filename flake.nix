@@ -2,6 +2,8 @@
   description = "Iago's NixOS system configuration flake";
 
   inputs = {
+    agenix.url = "github:ryantm/agenix";
+
     iago-nix.url = "github:iagocq/nix";
     iago-nixpkgs.url = "github:iagocq/nixpkgs";
     nixpkgs.url = "github:NixOS/nixpkgs";
@@ -33,11 +35,14 @@
         adguardhome = iago-nixpkgs.adguardhome;
       })
       inputs.iago-nix.overlay
+      inputs.agenix.overlay
     ];
 
     mkSystem = { host, system, modules ? [], nixpkgs ? {}, ... }@args: lib.nixosSystem ({
       modules = [
-        (import (./hosts + "/${host}/configuration.nix"))
+        #(./cachix)
+        (./hosts + "/${host}/configuration.nix")
+        inputs.agenix.nixosModules.age
         home-manager.nixosModules.home-manager
         {
           networking.hostName = host;
@@ -68,8 +73,8 @@
         system = "aarch64-linux";
       };
 
-      # nix build .#nixosConfigurations.raspberrypi.config.system.build.sdImage
-      raspberrpypi-sd-image = mkSystem {
+      # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
+      raspberrypi-sd-image = mkSystem {
         host = "raspberrypi";
         system = "aarch64-linux";
         modules = [

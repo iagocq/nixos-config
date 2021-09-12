@@ -8,7 +8,7 @@
   home.packages = with pkgs; [
     calc git git-crypt
     neofetch
-    zip unzip p7zip unar atool
+    zip unzip p7zip atool
     man-pages posix_man_pages
     screen tmux
     nnn

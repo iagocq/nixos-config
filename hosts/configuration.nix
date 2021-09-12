@@ -25,6 +25,7 @@
 
   environment.systemPackages = with pkgs; [
     vim htop file killall nethogs dnsutils coreutils lsof
+    agenix
   ];
 
   environment.shells = [ pkgs.zsh ];

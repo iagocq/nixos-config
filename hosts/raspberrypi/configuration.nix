@@ -36,9 +36,13 @@ in
       domain = config.common.nginx.domain;
     };
 
+    nginx = {
+      enable = true;
+      dynamic-resolving = false;
+    };
+
     acme.enable = true;
     dnsmasq.enable = true;
-    nginx.enable = true;
     bind.enable = true;
     lightspeed.enable = true;
     lightspeed.webrtc.ws-port = 8090;

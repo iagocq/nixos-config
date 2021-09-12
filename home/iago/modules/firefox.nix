@@ -9,7 +9,7 @@ in
     enable = mkEnableOption "";
   };
 
-  config = {
+  config = mkIf cfg.enable {
     programs.firefox = {
       enable = true;
       profiles.iago = {
