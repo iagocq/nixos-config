@@ -29,6 +29,11 @@ in
       default = config.common.nginx.domain;
     };
 
+    base-uri = mkOption {
+      type = types.str;
+      default = "/calibre";
+    };
+
     vhost = mkOption {
       type = types.bool;
       default = true;
@@ -48,10 +53,10 @@ in
 
     common.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
       locations = {
-        "/calibre" = {
+        "${cfg.base-uri}" = {
           proxyPass = "http://${cfg.address}:${toString cfg.port}";
           extraConfig = ''
-            proxy_set_header X-Script-Name /calibre;
+            proxy_set_header X-Script-Name ${cfg.base-uri};
             proxy_set_header X-Scheme $scheme;
           '';
         };

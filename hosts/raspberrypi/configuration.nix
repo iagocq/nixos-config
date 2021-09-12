@@ -27,15 +27,14 @@ in
     bitwarden_rs = {
       enable = true;
       base-uri = "/bitwarden/";
-      domain = config.common.nginx.domain;
-      port = 8090;
+      config.rocketPort = 8090;
+      config.websocketPort = 8091;
     };
 
     adguard = {
       enable = true;
       base-uri = "/adguard/";
-      domain = config.common.nginx.domain;
-      port = 8091;
+      port = 8092;
     };
 
     nginx = {
@@ -47,9 +46,9 @@ in
     dnsmasq.enable = true;
     bind.enable = true;
     lightspeed.enable = true;
-    lightspeed.webrtc.ws-port = 8092;
+    lightspeed.webrtc.ws-port = 8093;
     calibre.enable = true;
-    calibre.port = 8093;
+    calibre.port = 8094;
   };
 
   system.stateVersion = "20.09";
