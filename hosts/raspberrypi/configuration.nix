@@ -35,7 +35,7 @@ in
       enable = true;
       base-uri = "/adguard/";
       domain = config.common.nginx.domain;
-      port = config.common.bitwarden_rs.port + 1;
+      port = 8091;
     };
 
     nginx = {
@@ -47,9 +47,9 @@ in
     dnsmasq.enable = true;
     bind.enable = true;
     lightspeed.enable = true;
-    lightspeed.webrtc.ws-port = config.common.adguard.port + 1;
+    lightspeed.webrtc.ws-port = 8092;
     calibre.enable = true;
-    calibre.port = config.common.lightspeed.webrtc.ws-port + 1;
+    calibre.port = 8093;
   };
 
   system.stateVersion = "20.09";
