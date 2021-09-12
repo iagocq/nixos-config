@@ -28,7 +28,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = ${config.common.nginx.domain};
+      default = config.common.nginx.domain;
     };
 
     base-uri = mkOption {
