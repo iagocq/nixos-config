@@ -27,8 +27,6 @@ in
     bitwarden_rs = {
       enable = true;
       base-uri = "/bitwarden/";
-      config.rocketPort = 8090;
-      config.websocketPort = 8091;
     };
 
     adguard = {
