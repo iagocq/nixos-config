@@ -5,7 +5,7 @@ let
   cfg = config.common.nginx;
   s = config.common.secrets;
   mkVhost = vhost: {
-    extraConfig = cfg.sslExtraConfig + (if (vhost ? extraConfig) then vhost.extraConfig else "");
+    extraConfig = cfg.sslExtraConfig + toString cfg.extra-config;
     listen = cfg.listen-on;
   } // cfg.ssl // (removeAttrs vhost [ "extraConfig" ]);
 in
@@ -94,13 +94,7 @@ in
       resolver.addresses = mkIf cfg.dynamic-resolving cfg.resolver-addresses;
       proxyResolveWhileRunning = mkDefault cfg.dynamic-resolving;
 
-      virtualHosts = lib.recursiveUpdate {
-        ${cfg.domain} = mkVhost {
-          extraConfig = ''
-            error_page 497 https://$host$request_uri;
-          '' + toString cfg.extra-config;
-        };
-      } (builtins.mapAttrs (name: value: mkVhost value) cfg.vhosts);
+      virtualHosts = builtins.mapAttrs (name: value: mkVhost value) cfg.vhosts;
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.open-firewall (map (x: x.port) cfg.listen-on);
