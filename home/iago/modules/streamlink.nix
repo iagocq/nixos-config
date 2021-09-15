@@ -11,10 +11,15 @@ in
       type = types.bool;
       default = false;
     };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.streamlink;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.streamlink ];
+    home.packages = [ cfg.package ];
 
     xdg.configFile = {
       "streamlink/config".text = ''

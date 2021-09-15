@@ -2,11 +2,12 @@
   description = "Iago's NixOS system configuration flake";
 
   inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+
     agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     iago-nix.url = "github:iagocq/nix";
-    iago-nixpkgs.url = "github:iagocq/nixpkgs";
-    nixpkgs.url = "github:NixOS/nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -18,32 +19,27 @@
     nnn-src.flake = false;
   };
 
-  outputs = { nixpkgs, home-manager, ... }@inputs:
+  outputs = { agenix, home-manager, iago-nix, nixpkgs, ... }@inputs:
   let
     lib = nixpkgs.lib;
 
     nixpkgs-config = { config.allowUnfree = true; };
 
-    overlays = system:
-    let
-      iago-nixpkgs = import inputs.iago-nixpkgs ({ inherit system; } // nixpkgs-config);
-    in
-    [
+    overlays = system: [
       (final: prev: {
         zsh-f-sy-h = inputs.zsh-f-sy-h;
         nnn-src = inputs.nnn-src;
-        adguardhome = iago-nixpkgs.adguardhome;
       })
-      inputs.iago-nix.overlay
-      inputs.agenix.overlay
+      iago-nix.overlay
+      agenix.overlay
     ];
 
     mkSystem = { host, system, modules ? [], nixpkgs ? {}, ... }@args: lib.nixosSystem ({
       modules = [
+        agenix.nixosModules.age
+        home-manager.nixosModules.home-manager
         #(./cachix)
         (./hosts + "/${host}/configuration.nix")
-        inputs.agenix.nixosModules.age
-        home-manager.nixosModules.home-manager
         {
           networking.hostName = host;
 
@@ -57,7 +53,7 @@
             users.iago = import (./home/iago + "/${host}/home.nix");
           };
         }
-      ] ++ lib.attrsets.attrValues inputs.iago-nix.nixosModules
+      ] ++ lib.attrsets.attrValues iago-nix.nixosModules
         ++ modules;
     } // (removeAttrs args [ "host" "modules" "nixpkgs" ]));
   in
