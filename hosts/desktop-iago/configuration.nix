@@ -39,6 +39,8 @@
   };
 
   common.audio.quantum = 256;
+  common.audio.default-playback = "alsa_output.pci-0000_09_00.1.hdmi-stereo";
+  common.audio.default-capture = "alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.mono-fallback";
 
   common = {
     nginx = {

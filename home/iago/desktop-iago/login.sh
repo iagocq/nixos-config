@@ -10,15 +10,13 @@ maintain_link() {
 #start_jack 2>&1 > start_jack.log
 #pa_virtual_devices
 #source $HOME/.config/carla-env
-carla Documents/patchbay-pipewire.carxp &
 firefox &
 telegram-desktop &
 Discord &
 
 out="alsa_output.pci-0000_09_00.1.hdmi-stereo"
 mic="alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.mono-fallback"
-maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FL &
-maintain_link {pa_vsink_desktop:monitor,"$out":playback}_FR &
-maintain_link {pa_vsink_call:monitor,"$out":playback}_FL &
-maintain_link {pa_vsink_call:monitor,"$out":playback}_FR &
-maintain_link "$mic":capture_MONO "Noise Suppressor for Voice (Mono):Input" &
+maintain_link pa_vsink_desktop:output_FL pa_vsource_mixed:input_1 &
+maintain_link pa_vsink_desktop:output_FR pa_vsource_mixed:input_2 &
+maintain_link pa_vsource_voice:capture_1 pa_vsource_mixed:input_1 &
+maintain_link pa_vsource_voice:capture_2 pa_vsource_mixed:input_2 &

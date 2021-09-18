@@ -9,6 +9,9 @@ let
   pw-utils = import ./pipewire-utils.nix { inherit lib; };
   virtual-sinks = pw-utils.virtual-sinks;
   virtual-sources = pw-utils.virtual-sources;
+  sinkify = pw-utils.sinkify;
+  sourcify = pw-utils.sourcify;
+  filter-graph-module = pw-utils.filter-graph-module;
 in
 {
   options.common.audio = {
@@ -21,10 +24,20 @@ in
       type = types.ints.positive;
       default = 1024;
     };
+
+    default-playback = mkOption {
+      type = types.str;
+      default = "";
+    };
+
+    default-capture = mkOption {
+      type = types.str;
+      default = "";
+    };
   };
 
-  config = {
-    services.pipewire = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    services.pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
@@ -44,11 +57,11 @@ in
             args = {
               "factory.name" = "support.node.driver";
               "node.name" = "Dummy-Driver";
+              "node.group" = "pipewire.dummy";
               "priority.driver" = 8000;
             };
           }
-        ] ++ (virtual-sinks   [ "Call"  "Desktop" "Extra" ])
-          ++ (virtual-sources [ "Voice" "Mixed"   "Extra" ]);
+        ];
         "context.modules" = [
           {
             name = "libpipewire-module-rtkit";
@@ -78,7 +91,35 @@ in
           { name = "libpipewire-module-adapter"; }
           { name = "libpipewire-module-link-factory"; }
           { name = "libpipewire-module-session-manager"; }
-        ];
+        ] ++ virtual-sinks [
+          { name = "Call"; target = cfg.default-playback; }
+          { name = "Desktop"; target = cfg.default-playback; }
+        ] ++ virtual-sources [
+          { name = "Raw Mic"; target = cfg.default-capture; playback = { audio.position = [ "FL" "FR" ]; }; capture = { audio.position = [ "MONO" ]; }; }
+          { name = "Mixed"; }
+        ] ++ [ (filter-graph-module {
+          name = sourcify "Voice";
+          description = "Voice (Source)";
+          nodes = [
+            {
+              type = "ladspa";
+              name = "rnnoise";
+              plugin = "${pkgs.rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so";
+              label = "noise_suppressor_stereo";
+              control = {
+                "VAD Threshold (%)" = "0.0";
+              };
+            }
+          ];
+          capture = {
+            "node.passive" = true;
+            "node.target" = sourcify "Raw Mic";
+          };
+          playback = {
+            "media.class" = "Audio/Source";
+            "node.target" = "_invalid_";
+          };
+        }) ];
       };
       config.pipewire-pulse = {
         "context.properties" = {
@@ -136,14 +177,14 @@ in
     };
 
     #environment.etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsaPlugins}/etc/alsa/conf.d/50-jack.conf";
-    security.pam.loginLimits = mkIf cfg.enable [
+    security.pam.loginLimits = [
       { domain = "@audio"; type = "-"; item = "rtprio"; value = "99"; }
       { domain = "@audio"; type = "-"; item = "memlock"; value = "unlimited"; }
     ];
 
-    security.rtkit.enable = cfg.enable;
+    security.rtkit.enable = true;
 
-    services.udev.extraRules = mkIf cfg.enable ''
+    services.udev.extraRules = ''
       KERNEL=="rtc0", GROUP="audio"
       KERNEL=="hpet", GROUP="audio"
     '';
