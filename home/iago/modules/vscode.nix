@@ -21,10 +21,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [
-      (pkgs.vscode-with-extensions.override {
+    home.packages = with pkgs; [
+      (vscode-with-extensions.override {
         vscode = cfg.package;
-        vscodeExtensions = (import ./vscode-marketplace-exts.nix).extensions ++ cfg.extra-exts;
+        vscodeExtensions = vscode-utils.extensionsFromVscodeMarketplace (import ./vscode-marketplace-exts.nix).extensions ++ cfg.extra-exts;
       })
     ];
   };

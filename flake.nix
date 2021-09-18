@@ -27,6 +27,9 @@
 
     overlays = system: [
       (final: prev: {
+        nixUnstable = prev.nixUnstable.override {
+          patches = [ ./hosts/unset-is-macho.patch ];
+        };
         zsh-f-sy-h = inputs.zsh-f-sy-h;
         nnn-src = inputs.nnn-src;
       })

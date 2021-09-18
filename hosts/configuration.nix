@@ -18,7 +18,13 @@
     keyMap = "br-abnt2";
   };
 
+  system.activationScripts.diff = ''
+    ${pkgs.nixUnstable}/bin/nix store --experimental-features nix-command \
+    diff-closures /run/current-system "$systemConfig"
+  '';
+
   nix.package = pkgs.nixUnstable;
+
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

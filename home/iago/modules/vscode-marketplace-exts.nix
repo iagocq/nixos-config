@@ -18,6 +18,12 @@
     sha256 = "0mralimyzhyp4x9q98x3ck64ifbjqdp8cxcami7clvdvkmf8hxhf";
   }
   {
+    name = "zls-vscode";
+    publisher = "AugusteRame";
+    version = "1.0.4";
+    sha256 = "1nb6dcy0rkxqsfh93xp5qvdkamfwrv7k3a4nz6qfisy330ar3g9i";
+  }
+  {
     name = "Nix";
     publisher = "bbenoist";
     version = "1.0.1";
@@ -26,8 +32,8 @@
   {
     name = "bracket-pair-colorizer-2";
     publisher = "CoenraadS";
-    version = "0.2.0";
-    sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
+    version = "0.2.1";
+    sha256 = "0bfvzs4ac537zqhnqaa38jf4lhiy1fmqcv6lq89nnx8k963380z7";
   }
   {
     name = "doxdocgen";
@@ -38,14 +44,14 @@
   {
     name = "dendron";
     publisher = "dendron";
-    version = "0.43.1";
-    sha256 = "0kgcs8y0zhzdz21x0bha6hqlcbpm5jprzb9fwq7mlw7k8x75fl0m";
+    version = "0.59.1";
+    sha256 = "0p3igwn50a4zl95ai6rz5ljsfqqhr6r6mkr0jy9w32zzli0n8lbr";
   }
   {
     name = "dendron-markdown-preview-enhanced";
     publisher = "dendron";
-    version = "0.10.39";
-    sha256 = "1indlm3j3hfhl1zv0g92qpw0lac3086f1z1wzyx919z6102g789k";
+    version = "0.10.57";
+    sha256 = "0a36x8wfczbxl8vhyrgqf1y35xx4bqrv7zji4l02ja575yq9v6dq";
   }
   {
     name = "dendron-markdown-shortcuts";
@@ -56,50 +62,50 @@
   {
     name = "dendron-paste-image";
     publisher = "dendron";
-    version = "1.0.4";
-    sha256 = "1p279am2j3ii44mmdwxz5s1pgfa0mv1p0lyh3nkgr492ij2zn1s1";
+    version = "1.1.0";
+    sha256 = "19ss52fbiyg8ybwsam9hnvj1ws0b8c24yafh2pbpk0wmqii9673n";
   }
   {
     name = "vscode-opencl";
     publisher = "galarius";
-    version = "0.6.6";
-    sha256 = "0a3r2rwxvha8b26ldcsll9bdfp7vgw5sl3mxaq298mxywim8sl5p";
+    version = "0.7.1";
+    sha256 = "1awgd6b09ycmrx8jgwmndk3yz7gdxfwdjmn32bx6mhls6kla8g7d";
   }
   {
     name = "latex-workshop";
     publisher = "James-Yu";
-    version = "8.18.0";
-    sha256 = "0krdkma1fr0x07qlifv1qj2qv2isv72i47by5dmkzfsgz2ha98nr";
+    version = "8.20.2";
+    sha256 = "1ygpw8lvdvyvg82gyyzmlvn71qx8dh9np64xzf4n1mz03n7ljccz";
   }
   {
     name = "vscode-clangd";
     publisher = "llvm-vs-code-extensions";
-    version = "0.1.11";
-    sha256 = "1l7nx3a2rm7fls06rvmzlgf2bi2db3w4azxk89xjv2wxzxfaf35y";
+    version = "0.1.13";
+    sha256 = "0qjllvg2wwy3w8gg7q9dkbs0mccxxdq8cg59pbvw0vd8rxn71jpw";
   }
   {
     name = "rust-analyzer";
     publisher = "matklad";
-    version = "0.2.612";
-    sha256 = "0a87lnhzpzlni8b33hdskifi0qir88rnmfbzgsy4m5ahs8isw6az";
+    version = "0.2.743";
+    sha256 = "0j4njspzr2nz2lavy2d9hhxqay88v7g9d74dilnh7dgm8jqi8gny";
   }
   {
     name = "python";
     publisher = "ms-python";
-    version = "2021.5.842923320";
-    sha256 = "183ram995n9dqg7d9g3bn30a1mg7nkkg4knr814f4j9lqzsai22r";
+    version = "2021.9.1230869389";
+    sha256 = "0v4v5fcf2z1cys2if4k64qdwvr96hqvqw31fhdrrwwbgmx8cxjj3";
   }
   {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2021.6.885080120";
-    sha256 = "1vnpqhmfhywj1jmgbkx1db9kcacwl09hggjgddvd55ybnqic5cvj";
+    version = "2021.9.1001244851";
+    sha256 = "1lngrzrnwd9q5773k5afwxrcm35srl0jmh0cs46nhbp4igs4ipgx";
   }
   {
     name = "markdown-preview-enhanced";
     publisher = "shd101wyy";
-    version = "0.5.18";
-    sha256 = "0gc2qgaai674m9a9z9c10gz1if4r2a8xhyv98ln6aa5x0xhl4ngj";
+    version = "0.6.0";
+    sha256 = "0wxvvd1lvcivc6i2fvisihlydb7dkwv5alm7scqc35gwx2126arn";
   }
   {
     name = "rewrap";
@@ -110,8 +116,8 @@
   {
     name = "even-better-toml";
     publisher = "tamasfe";
-    version = "0.12.2";
-    sha256 = "1vz1sxkg24hsn4zfwzjdry4pp1hrc1fp516xpcyvq3ajr1xddlvs";
+    version = "0.14.2";
+    sha256 = "17djwa2bnjfga21nvyz8wwmgnjllr4a7nvrsqvzm02hzlpwaskcl";
   }
   {
     name = "clang-format";
@@ -122,14 +128,8 @@
   {
     name = "linkerscript";
     publisher = "ZixuanWang";
-    version = "1.0.1";
-    sha256 = "13fvv7g1ignky8yf48xykyhj1mxsrqdy4jn78n9l0d47hfmsc3q6";
-  }
-  {
-    name = "zls-vscode";
-    publisher = "AugusteRame";
-    version = "1.0.4";
-    sha256 = "sha256-Mb2RFRjD6+iw+ZaoMc/O3FU128bl9pGg07jPDDxrZtk=";
+    version = "1.0.2";
+    sha256 = "0rr5mz8g8myskgixiw76rwda8g955a1al8kk4s30b0byfaszia17";
   }
 ];
 }
