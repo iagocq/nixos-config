@@ -16,7 +16,7 @@ Discord &
 
 out="alsa_output.pci-0000_09_00.1.hdmi-stereo"
 mic="alsa_input.usb-Generalplus_Usb_Audio_Device_13662631792-00.mono-fallback"
-maintain_link pa_vsink_desktop:output_FL pa_vsource_mixed:input_1 &
-maintain_link pa_vsink_desktop:output_FR pa_vsource_mixed:input_2 &
-maintain_link pa_vsource_voice:capture_1 pa_vsource_mixed:input_1 &
-maintain_link pa_vsource_voice:capture_2 pa_vsource_mixed:input_2 &
+maintain_link pw_vsink_desktop:output_FL pw_vsource_mixed:input_1 &
+maintain_link pw_vsink_desktop:output_FR pw_vsource_mixed:input_2 &
+maintain_link pw_vsource_voice:capture_1 pw_vsource_mixed:input_1 &
+maintain_link pw_vsource_voice:capture_2 pw_vsource_mixed:input_2 &
