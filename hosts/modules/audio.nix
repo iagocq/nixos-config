@@ -34,6 +34,34 @@ in
       type = types.str;
       default = "";
     };
+
+    default-modules = mkOption {
+      type = types.anything;
+      default = [
+        {
+          name = "libpipewire-module-rtkit";
+          args = {
+            "nice.level" = -15;
+            "rt.prio" = 88;
+            "rt.time.soft" = 200000;
+            "rt.time.hard" = 200000;
+          };
+          flags = [ "ifexists" "nofail" ];
+        }
+        { name = "libpipewire-module-protocol-native"; }
+        { name = "libpipewire-module-profiler"; }
+        { name = "libpipewire-module-metadata"; }
+        { name = "libpipewire-module-spa-device-factory"; }
+        { name = "libpipewire-module-spa-node-factory"; }
+        { name = "libpipewire-module-client-node"; }
+        { name = "libpipewire-module-client-device"; }
+        { name = "libpipewire-module-portal"; flags = [ "ifexists" "nofail" ]; }
+        { name = "libpipewire-module-access"; args = {}; }
+        { name = "libpipewire-module-adapter"; }
+        { name = "libpipewire-module-link-factory"; }
+        { name = "libpipewire-module-session-manager"; }
+      ];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -62,36 +90,8 @@ in
             };
           }
         ];
-        "context.modules" = [
-          {
-            name = "libpipewire-module-rtkit";
-            args = {
-              "nice.level" = -15;
-              "rt.prio" = 88;
-              "rt.time.soft" = 200000;
-              "rt.time.hard" = 200000;
-            };
-            flags = [ "ifexists" "nofail" ];
-          }
-          { name = "libpipewire-module-protocol-native"; }
-          { name = "libpipewire-module-profiler"; }
-          { name = "libpipewire-module-metadata"; }
-          { name = "libpipewire-module-spa-device-factory"; }
-          { name = "libpipewire-module-spa-node-factory"; }
-          { name = "libpipewire-module-client-node"; }
-          { name = "libpipewire-module-client-device"; }
-          {
-            name = "libpipewire-module-portal";
-            flags = [ "ifexists" "nofail" ];
-          }
-          {
-            name = "libpipewire-module-access";
-            args = {};
-          }
-          { name = "libpipewire-module-adapter"; }
-          { name = "libpipewire-module-link-factory"; }
-          { name = "libpipewire-module-session-manager"; }
-        ] ++ virtual-sinks [
+        "context.modules" = (cfg.default-modules
+        ) ++ virtual-sinks [
           { name = "Call"; target = cfg.default-playback; }
           { name = "Desktop"; target = cfg.default-playback; }
         ] ++ virtual-sources [
@@ -176,17 +176,6 @@ in
       ];
     };
 
-    #environment.etc."alsa/conf.d/50-jack.conf".source = "${pkgs.alsaPlugins}/etc/alsa/conf.d/50-jack.conf";
-    security.pam.loginLimits = [
-      { domain = "@audio"; type = "-"; item = "rtprio"; value = "99"; }
-      { domain = "@audio"; type = "-"; item = "memlock"; value = "unlimited"; }
-    ];
-
     security.rtkit.enable = true;
-
-    services.udev.extraRules = ''
-      KERNEL=="rtc0", GROUP="audio"
-      KERNEL=="hpet", GROUP="audio"
-    '';
   };
 }

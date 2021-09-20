@@ -35,7 +35,7 @@
   };
 
   users.users.iago = {
-    extraGroups = [ "jackaudio" "audio" "docker" ];
+    extraGroups = [ "docker" ];
   };
 
   common.audio.quantum = 256;
