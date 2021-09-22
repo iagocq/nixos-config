@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    tribler-nixpkgs.url = "github:viric/nixpkgs/tribler-master2";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +34,8 @@
         };
         zsh-f-sy-h = inputs.zsh-f-sy-h;
         nnn-src = inputs.nnn-src;
+        tdesktop = inputs.nixpkgs-master.legacyPackages.${system}.tdesktop;
+        tribler = inputs.tribler-nixpkgs.legacyPackages.${system}.tribler;
       })
       iago-nix.overlay
       agenix.overlay

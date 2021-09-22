@@ -11,13 +11,20 @@ in
       type = types.bool;
       default = false;
     };
+
+    nix-index = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 
-  config = {
-    home.sessionVariables = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    home.sessionVariables = {
       EDITOR = "vim";
       LS_COLORS = builtins.readFile ./sh/LS_COLORS;
       LSCOLORS = builtins.readFile ./sh/LSCOLORS;
     };
+
+    programs.nix-index.enable = cfg.nix-index;
   };
 }

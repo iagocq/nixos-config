@@ -10,7 +10,7 @@
     tdesktop discord qbittorrent vlc mpv
     obs-studio logisim feh chatterino2
     lutris steam qjackctl pavucontrol
-    carla calibre
+    carla calibre tribler
 
     #ungoogled-chromium
     multimc ripcord
@@ -39,12 +39,13 @@
     pulseaudio
     
     # Java and Android things
-    adoptopenjdk-hotspot-bin-8
+    #adoptopenjdk-hotspot-bin-8
     android-studio apktool dex2jar jd-gui
 
     calf rnnoise-plugin x42-plugins
   ];
 
+  custom.shell.nix-index = true;
   custom.alacritty.enable = true;
   custom.terminal.cmd = config.custom.alacritty.cmd;
   custom.rofi.enable = true;
