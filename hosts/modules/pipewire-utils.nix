@@ -31,11 +31,12 @@ rec {
     capture = {
       "media.class" = "Audio/Sink";
       "node.target" = "_invalid_";
-    };
+    } // capture;
     playback = {
-      "node.target" = target;
+      "node.target" = "_invalid_";
       "node.passive" = true;
-    } // optionalAttrs (target != null) { node.target = target; };
+    } // optionalAttrs (target != null) { "node.target" = target; }
+      // playback;
   };
 
   virtual-source = {
@@ -46,9 +47,9 @@ rec {
     name = sourcify name;
     description = name + " (Source)";
     capture = {
-      "node.target" = target;
+      "node.target" = "_invalid_";
       "node.passive" = true;
-    } // optionalAttrs (target != null) { node.target = target; }
+    } // optionalAttrs (target != null) { "node.target" = target; }
       // capture;
     playback = {
       "media.class" = "Audio/Source";

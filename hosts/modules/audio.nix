@@ -95,7 +95,6 @@ in
           { name = "Call"; target = cfg.default-playback; }
           { name = "Desktop"; target = cfg.default-playback; }
         ] ++ virtual-sources [
-          { name = "Raw Mic"; target = cfg.default-capture; playback = { audio.position = [ "FL" "FR" ]; }; capture = { audio.position = [ "MONO" ]; }; }
           { name = "Mixed"; }
         ] ++ [ (filter-graph-module {
           name = sourcify "Voice";
@@ -113,11 +112,12 @@ in
           ];
           capture = {
             "node.passive" = true;
-            "node.target" = sourcify "Raw Mic";
+            "node.target" = cfg.default-capture;
           };
           playback = {
             "media.class" = "Audio/Source";
             "node.target" = "_invalid_";
+            "audio.position" = [ "FL" "FR" ];
           };
         }) ];
       };
