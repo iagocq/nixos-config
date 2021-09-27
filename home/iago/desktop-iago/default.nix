@@ -1,10 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ../home.nix
-  ];
-
   home.packages = with pkgs; [
     # Desktop applications
     tdesktop discord qbittorrent vlc mpv

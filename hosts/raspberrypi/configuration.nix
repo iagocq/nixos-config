@@ -10,6 +10,9 @@ in
     ./hardware-configuration.nix
   ];
   
+  nix.trustedUsers = [ "root" "@wheel" ];
+  security.sudo.wheelNeedsPassword = false;
+  
   networking = {
     firewall.enable = true;
     wireless.enable = false;

@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, host, ... }:
 
 {
   imports = [
-    ./modules
+    (./. + "/${host}")
   ];
 
   home.packages = with pkgs; [

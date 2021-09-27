@@ -3,8 +3,7 @@
 {
   imports = [
     ./modules
-
-    ./users.nix
+    ./users
     ./ssh.nix
   ];
 
