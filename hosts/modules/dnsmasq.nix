@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.common.dnsmasq;
-  s = config.common.secrets;
+  lan = config.common.info.network.lan;
 in
 {
   options.common.dnsmasq = {
@@ -14,7 +14,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = s.network.intranet-domain;
+      default = lan.lan-domain;
     };
 
     dns-port = mkOption {
@@ -24,27 +24,27 @@ in
 
     dhcp-range = mkOption {
       type = types.str;
-      default = s.network.dhcp.range;
+      default = lan.dhcp.range;
     };
 
     router = mkOption {
       type = types.str;
-      default = s.network.gateway;
+      default = lan.gateway;
     };
 
     dns-server = mkOption {
       type = types.str;
-      default = s.network.dns-server;
+      default = lan.dns-server;
     };
 
     dhcp-subnet = mkOption {
       type = types.str;
-      default = s.network.subnet;
+      default = lan.subnet;
     };
 
     extra-config = mkOption {
       type = types.lines;
-      default = s.network.dhcp.dnsmasq-extra;
+      default = lan.dhcp.dnsmasq-extra;
     };
 
     open-firewall = mkOption {

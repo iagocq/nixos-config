@@ -3,7 +3,6 @@
 {
   imports = [
     ./modules
-    ./users
     ./ssh.nix
   ];
 
@@ -18,6 +17,7 @@
   };
 
   system.activationScripts.diff = ''
+    [ -e /run/current-system ] &&
     ${pkgs.nixUnstable}/bin/nix store --experimental-features nix-command \
     diff-closures /run/current-system "$systemConfig"
   '';
@@ -34,9 +34,4 @@
   ];
 
   environment.shells = [ pkgs.zsh ];
-
-  # https://github.com/NixOS/nixpkgs/pull/85073
-  # https://github.com/NixOS/nixpkgs/pull/123902
-  # https://github.com/NixOS/nixpkgs/pull/124431
-  # systemd.services.mount-pstore.enable = false;
 }

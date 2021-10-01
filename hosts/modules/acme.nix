@@ -3,24 +3,47 @@
 with lib;
 let
   cfg = config.common.acme;
-  s = config.common.secrets;
+  info = config.common.info;
+  network = info.network;
 in
 {
   options.common.acme = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "Enable ACME service";
+
+    email = mkOption {
+      type = types.str;
+      default = info.email;
+    };
+
+    domain = mkOption {
+      type = types.str;
+      default = network.domain;
+    };
+
+    credentials = mkOption {
+      type = types.str;
+      default = info.acme.credentials;
+    };
+
+    provider = mkOption {
+      type = types.str;
+      default = info.acme.provider;
+    };
+
+    extra-domains = mkOption {
+      type = types.listOf types.str;
+      default = [ "*.${cfg.domain}" ];
     };
   };
 
-  config = {
-    security.acme = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    security.acme = {
       acceptTerms = true;
-      email = s.acme.email;
-      certs."${s.acme.domain}" = {
-        credentialsFile = pkgs.writeText "acme-env" s.acme.env;
-        dnsProvider = mkDefault s.acme.provider;
-        extraDomainNames = [ "*.${s.acme.domain}" ];
+      email = cfg.email;
+      certs.${cfg.domain} = {
+        credentialsFile = mkIf (cfg.credentials != null) cfg.credentials;
+        dnsProvider = cfg.provider;
+        extraDomainNames = cfg.extra-domains;
       };
     };
   };

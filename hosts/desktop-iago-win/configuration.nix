@@ -20,7 +20,6 @@ in
   environment.etc."resolv.conf".enable = false;
 
   networking.dhcpcd.enable = false;
-  networking.hostName = "wsl";
 
   users.users.root = {
     shell = "${syschdemd}/bin/syschdemd";

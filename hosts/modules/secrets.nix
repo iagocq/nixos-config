@@ -2,30 +2,24 @@
 
 with lib;
 let
-  path = ../../secrets;
-  secret = file: (path + "/${file}" );
+  cfg = config.common.secrets;
 
-  mkSecret = name:
-  let
-    raw-module = import (secret name);
-    module = if builtins.typeOf raw-module == "lambda" then raw-module args else raw-module;
-  in
-    mkOption {
-      type = types.anything;
-      default = module;
-    };
-
-  loadSecrets =
-  let
-    contents = builtins.readDir path;
-    nix-only = builtins.filter (x: strings.hasSuffix ".nix" x) (builtins.attrNames contents);
-  in
-    builtins.listToAttrs (map (file: {
-      name = lib.strings.removeSuffix ".nix" file;
-      value = mkSecret file;
-    }) nix-only);
-
+  age-secrets = (import cfg.secrets-file).age;
 in
 {
-  options.common.secrets = loadSecrets;
+  options.common.secrets = {
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    secrets-file = mkOption {
+      type = types.path;
+      default = ../../config/age.nix;
+    };
+  };
+
+  config = mkIf cfg.enable {
+    age.secrets = age-secrets;
+  };
 }

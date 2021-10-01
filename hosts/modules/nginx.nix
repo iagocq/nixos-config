@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.common.nginx;
-  s = config.common.secrets;
+  network = config.common.info.network;
   mkVhost = vhost: {
     extraConfig = cfg.sslExtraConfig + toString cfg.extra-config;
     listen = cfg.listen-on;
@@ -18,7 +18,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = s.network.domain;
+      default = network.domain;
     };
 
     ssl = mkOption {
@@ -41,7 +41,7 @@ in
 
     resolver-addresses = mkOption {
       type = types.listOf types.str;
-      default = [ s.network.dns-server ];
+      default = [ network.dns-server ];
     };
 
     dynamic-resolving = mkOption {

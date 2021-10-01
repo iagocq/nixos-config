@@ -1,9 +1,11 @@
-{ config, lib, pkgs, host, ... }:
+{ config, lib, pkgs, host ? "default", ... }:
 
+let
+  host-path = ./. + "/${host}";
+  host-import = if builtins.pathExists host-path then [ host-path ] else [ ];
+in
 {
-  imports = [
-    (./. + "/${host}")
-  ];
+  imports = host-import;
 
   home.packages = with pkgs; [
     calc git git-crypt
@@ -31,4 +33,5 @@
 
   home.username = "iago";
   home.homeDirectory = "/home/iago-nixos";
+  home.stateVersion = "21.03";
 }

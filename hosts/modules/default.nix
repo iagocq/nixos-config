@@ -10,9 +10,11 @@ with lib;
     ./bitwarden_rs.nix
     ./calibre.nix
     ./dnsmasq.nix
+    ./info.nix
     ./lightspeed.nix
     ./nginx.nix
     ./secrets.nix
     ./sslh.nix
+    ./users.nix
   ];
 }

@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.common.bitwarden_rs;
+  nginx = config.common.nginx;
 in
 {
   options.common.bitwarden_rs = {
@@ -26,7 +27,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = config.common.nginx.domain;
+      default = nginx.domain;
     };
 
     vhost = mkOption {

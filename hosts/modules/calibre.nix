@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.common.calibre;
+  nginx = config.common.nginx;
 in
 {
   options.common.calibre = {
@@ -26,7 +27,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = config.common.nginx.domain;
+      default = nginx.domain;
     };
 
     base-uri = mkOption {
@@ -42,7 +43,7 @@ in
 
   config = mkIf cfg.enable {
     services.calibre-web = {
-      enable = cfg.enable;
+      enable = true;
       listen.ip = cfg.address;
       listen.port = cfg.port;
       options = {

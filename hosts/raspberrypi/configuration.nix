@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
-  s = config.common.secrets;
+  info = config.common.info;
+  lan = info.network.lan;
 in
 {
   imports = [
@@ -17,12 +18,12 @@ in
     firewall.enable = true;
     wireless.enable = false;
     interfaces.eth0.ipv4 = {
-      addresses = s.network.raspberrypi.addresses;
-      routes = [ s.network.default-route ];
+      addresses = lan.server.addresses;
+      routes = [ lan.default-route ];
     };
-    nameservers = [ s.network.dns-server ];
-    extraHosts = s.network.raspberrypi.extra-hosts;
-    domain = s.network.intranet-domain;
+    nameservers = [ lan.dns-server ];
+    extraHosts = lan.server.extra-hosts;
+    domain = lan.lan-domain;
     resolvconf.useLocalResolver = false;
   };
 
@@ -44,13 +45,22 @@ in
       extra-config = [ "client_max_body_size 200m;" ];
     };
 
+    bind = {
+      enable = true;
+
+      extra-config = info.bind.config;
+      extra-options = info.bind.options;
+    }; 
+
+    calibre = {
+      enable = true;
+      port = 8094;
+    };
+
     acme.enable = true;
     dnsmasq.enable = true;
-    bind.enable = true;
     lightspeed.enable = true;
     lightspeed.webrtc.ws-port = 8093;
-    calibre.enable = true;
-    calibre.port = 8094;
   };
 
   system.stateVersion = "20.09";

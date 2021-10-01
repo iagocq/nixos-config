@@ -1,50 +1,53 @@
 { ... }@inputs:
 
 let
-  nlib = inputs.nixpkgs.lib;
+  lib = inputs.nixpkgs.lib;
   mkSystem = {
-      host
-    , system
-    , home-manager ? true
-    , users ? []
-    , modules ? []
-    , nixpkgs ? {}
-    , mkOverlays ? _: [], ... }@args: nlib.nixosSystem ({
+    host
+  , system
+  , global-config ? {}
+  , type ? "unknown"
+  , home-manager ? true
+  , users ? []
+  , users-path ? ../users
+  , modules ? []
+  , nixpkgs ? {}
+  , mkOverlays ? _: [], ... }@args: lib.nixosSystem (
+  let specialArgs = { inherit host global-config type users users-path; }; in {
 
-    specialArgs = { inherit inputs users; };
+    inherit specialArgs;
     modules = [
       (../hosts + "/${host}/configuration.nix")
       {
-        networking.hostName = nlib.mkDefault host;
+        networking.hostName = lib.mkDefault host;
         nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
-        nixpkgs = nlib.attrsets.recursiveUpdate {
+        nixpkgs = lib.attrsets.recursiveUpdate {
           overlays = mkOverlays { inherit system; };
         } nixpkgs;
       }
     ] ++ modules
-      ++ nlib.lists.optionals home-manager [
+      ++ lib.lists.optionals home-manager [
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            users = nlib.foldr (user: next:
+
+            users =
               let
-                path = ../home + "/${user}";
-                attrs = {
-                  ${user} = import path;
-                };
-              in if (builtins.pathExists path) then attrs // next else next
-            ) {} users;
-            sharedModules = [ ../home/modules ];
-            extraSpecialArgs = { inherit host; };
+                all-users = import users-path { inherit lib; pkgs = null; };
+                ulib = all-users.lib;
+              in ulib.attrsOf "hm-module" (ulib.loadUsers all-users users);
+
+            sharedModules = [ (users-path + /hm-modules) ];
+            extraSpecialArgs = specialArgs;
           };
         }
       ];
-  } // removeAttrs args [ "host" "home-manager" "users" "modules" "nixpkgs" "mkOverlays" ]);
-  wrap = f: default: args: f (default // args);
+  } // removeAttrs args [ "host" "type" "home-manager" "users" "users-path" "modules" "nixpkgs" "mkOverlays" ]);
 in
 {
-  inherit nlib mkSystem wrap;
+  nlib = lib;
+  inherit mkSystem;
 }

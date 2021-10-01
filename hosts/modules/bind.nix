@@ -3,48 +3,41 @@
 with lib;
 let
   cfg = config.common.bind;
-  s = config.common.secrets;
+  info = config.common.info;
+  bind = info.bind;
+  lan = info.network.lan;
 in
 {
   options.common.bind = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
-
-    zones = mkOption {
-      type = types.listOf types.anything;
-      default = s.bind.zones;
-    };
+    enable = mkEnableOption "Enable bind9 service";
 
     listen-on = mkOption {
       type = types.listOf types.str;
-      default = [ s.network.bind ];
+      default = [ lan.bind ];
     };
 
     extra-config = mkOption {
       type = types.lines;
-      default = s.bind.extra-config;
+      default = bind.extra-config;
     };
 
     extra-options = mkOption {
       type = types.lines;
-      default = s.bind.extra-options;
+      default = bind.extra-options;
     };
 
     cache-networks = mkOption {
-      default = [ "127.0.0.0/8" s.network.subnet ];
+      default = [ "127.0.0.0/8" lan.subnet ];
     };
 
     forwarders = mkOption {
-      default = [ s.network.dns-server ];
+      default = [ lan.dns-server ];
     };
   };
-  
-  config = {
-    services.bind = mkIf cfg.enable {
+ 
+  config = mkIf cfg.enable {
+    services.bind = {
       enable = true;
-      zones = cfg.zones;
       listenOn = cfg.listen-on;
       forwarders = cfg.forwarders;
       extraConfig = cfg.extra-config;

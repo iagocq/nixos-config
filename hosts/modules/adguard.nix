@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.common.adguard;
+  nginx = config.common.nginx;
 in
 {
   options.common.adguard = {
@@ -28,7 +29,7 @@ in
 
     domain = mkOption {
       type = types.str;
-      default = config.common.nginx.domain;
+      default = nginx.domain;
     };
 
     base-uri = mkOption {
@@ -59,6 +60,6 @@ in
       };
     };
 
-    networking.firewall.allowedUDPPorts = [ 53 ];
+    networking.firewall.allowedUDPPorts = mkIf cfg.open-firewall [ 53 ];
   };
 }

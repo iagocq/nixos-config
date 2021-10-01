@@ -1,3 +1,4 @@
+
 {
   description = "Iago's NixOS system configuration flake";
 
@@ -14,6 +15,8 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
   };
 
   outputs = ({ ... }@inputs:
@@ -41,17 +44,20 @@
         desktop-iago = mkSystem {
           host = "desktop-iago";
           system = "x86_64-linux";
+          type = "desktop";
         };
 
         raspberrypi = mkSystem {
           host = "raspberrypi";
           system = "aarch64-linux";
+          type = "embedded";
         };
 
         # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
         raspberrypi-sd-image = mkSystem {
           host = "raspberrypi";
           system = "aarch64-linux";
+          type = "embedded";
           modules = [
             (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix")
             {
@@ -62,10 +68,33 @@
           ];
         };
 
-        # nix build .#nixosConfigurations.wsl.config.system.build.tarball
-        wsl = mkSystem {
-          host = "wsl";
+        # nix build .#nixosConfigurations.desktop-iago-win.config.system.build.tarball
+        desktop-iago-win = mkSystem {
+          host = "desktop-iago-win";
           system = "x86_64-linux";
+          type = "embedded";
+          nixpkgs = {
+            config.vim.gui = false;
+          };
+        };
+
+        amogus = mkSystem {
+          host = "amogus";
+          system = "aarch64-linux";
+          type = "server";
+          nixpkgs = {
+            config.vim.gui = false;
+          };
+        };
+
+        # nix build .#nixosConfigurations.amogus-kexec.config.system.build.kexec_tarball
+        amogus-kexec = mkSystem {
+          host = "amogus";
+          system = "aarch64-linux";
+          type = "server";
+          modules = [
+            (import ./hosts/amogus-kexec/configuration.nix)
+          ];
           nixpkgs = {
             config.vim.gui = false;
           };
