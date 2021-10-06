@@ -8,4 +8,6 @@
   ];
 
   networking.interfaces.enp0s3.useDHCP = true;
+
+  users.users.iago.initialHashedPassword = "";
 }
