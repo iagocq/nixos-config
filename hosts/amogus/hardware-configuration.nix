@@ -9,7 +9,7 @@
   boot.initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
   boot.loader = {
     grub = {
-      enable = true;
+      enable = lib.mkDefault true;
       efiSupport = true;
       efiInstallAsRemovable = true;
       device = "nodev";
