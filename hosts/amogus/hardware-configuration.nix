@@ -5,6 +5,7 @@
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
+  boot.kernelParams = [ "boot.shell_on_fail=1" ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
   boot.loader = {
