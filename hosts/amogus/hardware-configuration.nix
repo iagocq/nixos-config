@@ -22,6 +22,10 @@
       device = "rpool/local/root";
       fsType = "zfs";
     };
+    "/nix" = {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+    };
     "/boot" = {
       device = "/dev/disk/by-label/boot";
     };
