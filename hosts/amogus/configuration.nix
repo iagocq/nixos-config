@@ -8,6 +8,7 @@
   ];
 
   networking.interfaces.enp0s3.useDHCP = true;
+  networking.hostId = "b6ea3836";
 
   users.users.iago.initialHashedPassword = "";
 
