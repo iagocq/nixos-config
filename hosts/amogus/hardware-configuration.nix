@@ -5,8 +5,8 @@
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
+  boot.supportedFilesystems = [ "zfs" ];
   boot.initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
-
   boot.loader = {
     grub = {
       enable = true;
@@ -18,7 +18,16 @@
   };
 
   fileSystems = lib.mkDefault {
-    "/" = { device = "/dev/disk/by-uuid/7abea936-8ed6-442f-a0f0-20a26b734c82"; fsType = "ext4"; };
-    "/boot/efi" = { device = "/dev/disk/by-uuid/D058-E526"; fsType = "vfat"; };
+    "/" = {
+      device = "rpool/local/root";
+      fsType = "zfs";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-label/boot";
+    };
+    "/boot/efi" = {
+      device = "/dev/disk/by-label/UEFI";
+      fsType = "vfat";
+    };
   };
 }
