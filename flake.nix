@@ -29,10 +29,9 @@
         overlays = [ inputs.agenix.overlay ] ++ overlays;
       } // removeAttrs args [ "overlays" ]);
 
-      mkSystem = { modules ? [], ... }@args: lib.mkSystem ({
+      mkSystem = { modules ? [], users ? [ "iago" ], ... }@args: lib.mkSystem ({
         inherit (config) nixpkgs;
-        inherit mkOverlays;
-        users = [ "iago" ];
+        inherit mkOverlays users;
         modules = [
           inputs.agenix.nixosModules.age
         ] ++ lib.nlib.attrsets.attrValues inputs.iago-nix.nixosModules
@@ -98,6 +97,13 @@
           nixpkgs = {
             config.vim.gui = false;
           };
+        };
+
+        lap-1 = mkSystem {
+          users = [ "c" ];
+          host = "lap-1";
+          system = "x86_64-linux";
+          type = "laptop";
         };
       };
     }
