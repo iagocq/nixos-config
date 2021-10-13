@@ -7,5 +7,8 @@ rec {
 
   trusted = { };
 
-  age = with keys; [ desktop-iago raspberrypi desktop-iago-win ];
+  age = with keys; {
+    internal = [ desktop-iago raspberrypi ];
+    external = [ desktop-iago ];
+  };
 }

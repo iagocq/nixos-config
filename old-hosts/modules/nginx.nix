@@ -41,7 +41,7 @@ in
 
     resolver-addresses = mkOption {
       type = types.listOf types.str;
-      default = [ network.dns-server ];
+      default = [ network.lan.dns-server ];
     };
 
     dynamic-resolving = mkOption {

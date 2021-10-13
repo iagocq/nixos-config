@@ -17,7 +17,7 @@ in
   ];
 
   home.sessionVariables = {
-    NNN_OPENER = "${pkgs.nnn-src}/plugins/nuke";
+    NNN_OPENER = "${pkgs.nnn.src}/plugins/nuke";
   };
 
   custom.readline.enable = true;
@@ -27,7 +27,7 @@ in
   custom.zsh.plugins = [
     {
       name = "fast-syntax-highlighting";
-      src = pkgs.zsh-f-sy-h.outPath;
+      src = pkgs.zsh-fast-syntax-highlighting.src;
     }
   ];
 

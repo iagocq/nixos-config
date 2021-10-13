@@ -12,18 +12,20 @@ let
   , users-path ? ../users
   , modules ? []
   , nixpkgs ? {}
-  , mkOverlays ? _: [], ... }@args: lib.nixosSystem (
+  , overlays ? []
+  , mkOverlays ? _: [], ... }@args: (lib.makeOverridable lib.nixosSystem) (
   let specialArgs = { inherit host global-config type users users-path; }; in {
 
     inherit specialArgs;
     modules = [
+      (../hosts/modules)
       (../hosts + "/${host}/configuration.nix")
       {
         networking.hostName = lib.mkDefault host;
         nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
         nixpkgs = lib.attrsets.recursiveUpdate {
-          overlays = mkOverlays { inherit system; };
+          overlays = mkOverlays { inherit nixpkgs system overlays; };
         } nixpkgs;
       }
     ] ++ modules
@@ -45,7 +47,7 @@ let
           };
         }
       ];
-  } // removeAttrs args [ "host" "type" "home-manager" "users" "users-path" "modules" "nixpkgs" "mkOverlays" ]);
+  } // removeAttrs args [ "host" "type" "home-manager" "users" "users-path" "modules" "nixpkgs" "overlays" "mkOverlays" ]);
 in
 {
   nlib = lib;

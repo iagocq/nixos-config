@@ -53,9 +53,9 @@
       feh=${pkgs.feh}/bin/feh \
       xdotool=${pkgs.xdotool}/bin/xdotool \
       xclip=${pkgs.xclip}/bin/xclip \
-      ${./screenshot.sh} \
+      ${(pkgs.writeScript "screenshot" (builtins.readFile ./screenshot.sh)).outPath} \
     '';
-    login = "${./login.sh}";
+    login = "${(pkgs.writeScript "login" (builtins.readFile ./login.sh)).outPath}";
   };
 
   custom.picom.enable = true;
