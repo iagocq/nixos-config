@@ -1,67 +1,32 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, modulesPath,... }:
 
-let
-  info = config.common.info;
-  lan = info.network.lan;
-in
 {
   imports = [
-    ../configuration.nix
-
-    ./hardware-configuration.nix
+    (modulesPath + "/installer/scan/not-detected.nix")
+    ./device.nix
   ];
-  
+
   nix.trustedUsers = [ "root" "@wheel" ];
   security.sudo.wheelNeedsPassword = false;
-  
-  networking = {
-    firewall.enable = true;
-    wireless.enable = false;
-    interfaces.eth0.ipv4 = {
-      addresses = lan.server.addresses;
-      routes = [ lan.default-route ];
-    };
-    nameservers = [ lan.dns-server ];
-    extraHosts = lan.server.extra-hosts;
-    domain = lan.lan-domain;
+
+  spc.int.full.enable = true;
+
+  networking = let network = config.spc.int.cfg.network; in {
+    nameservers = [ network.dnsServer ];
+    domain = network.lanDomain;
     resolvconf.useLocalResolver = false;
   };
 
-  common = {
-    bitwarden_rs = {
-      enable = true;
-      base-uri = "/bitwarden/";
+  zramSwap.enable = true;
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD";
+      fsType = "ext4";
     };
-
-    adguard = {
-      enable = true;
-      base-uri = "/adguard/";
-      port = 8092;
-    };
-
-    nginx = {
-      enable = true;
-      dynamic-resolving = false;
-      extra-config = [ "client_max_body_size 200m;" ];
-    };
-
-    bind = {
-      enable = true;
-
-      extra-config = info.bind.config;
-      extra-options = info.bind.options;
-    }; 
-
-    calibre = {
-      enable = true;
-      port = 8094;
-    };
-
-    acme.enable = true;
-    dnsmasq.enable = true;
-    lightspeed.enable = true;
-    lightspeed.webrtc.ws-port = 8093;
   };
 
-  system.stateVersion = "20.09";
+  swapDevices = [
+    { device = "/swapfile"; size = 1024; }
+  ];
 }

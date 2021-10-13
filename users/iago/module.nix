@@ -1,13 +1,15 @@
 { config, host ? "unknown", lib, pkgs, ... }:
 
 {
-  iago = {
+  users.users.iago = {
+    shell = pkgs.zsh;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     home = "/home/iago-nixos";
+    initialHashedPassword = "";
 
     openssh.authorizedKeys.keys =
       let trusted = (import ../default.nix { inherit lib pkgs; }).iago.keys.trusted; in
-      if trusted ? ${host} then trusted.${host} else [];
+      trusted.${host} or [];
   };
 }

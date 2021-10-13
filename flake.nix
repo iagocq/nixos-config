@@ -3,10 +3,8 @@
   description = "Iago's NixOS system configuration flake";
 
   inputs = {
-    overlays.url = "path:overlays";
-    overlays.inputs.iago-nix.follows = "iago-nix";
-
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    tribler-nixpkgs.url = "github:viric/nixpkgs/tribler-master2";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -24,10 +22,18 @@
       config = import ./config;
       lib = import ./lib inputs;
 
-      mkOverlays = { overlays ? [], ...}@args: inputs.overlays.mkOverlays ({
-        inherit (config) nixpkgs;
-        overlays = [ inputs.agenix.overlay ] ++ overlays;
-      } // removeAttrs args [ "overlays" ]);
+      mkOverlays = { nixpkgs, system, overlays ? [] }:
+        let
+          cfg-final = nixpkgs // { inherit system; };
+          tribler-npkgs = import inputs.tribler-nixpkgs cfg-final;
+        in
+        [
+          (final: prev: {
+            tribler = tribler-npkgs.pkgs.tribler;
+          })
+          inputs.iago-nix.overlay
+          inputs.agenix.overlay
+        ] ++ overlays;
 
       mkSystem = { modules ? [], users ? [ "iago" ], ... }@args: lib.mkSystem ({
         inherit (config) nixpkgs;
@@ -43,24 +49,20 @@
         desktop-iago = mkSystem {
           host = "desktop-iago";
           system = "x86_64-linux";
-          type = "desktop";
         };
 
         raspberrypi = mkSystem {
           host = "raspberrypi";
           system = "aarch64-linux";
-          type = "embedded";
         };
 
         # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
         raspberrypi-sd-image = mkSystem {
           host = "raspberrypi";
           system = "aarch64-linux";
-          type = "embedded";
           modules = [
-            (import "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64-installer.nix")
+            ({ modulesPath, ...}: import "${modulesPath}/installer/sd-card/sd-image-aarch64-installer.nix")
             {
-              users.users.iago.initialHashedPassword = "";
               services.getty.autologinUser = lib.mkForce "iago";
               sdImage.compressImage = false;
             }
@@ -71,7 +73,6 @@
         desktop-iago-win = mkSystem {
           host = "desktop-iago-win";
           system = "x86_64-linux";
-          type = "embedded";
           nixpkgs = {
             config.vim.gui = false;
           };
@@ -80,20 +81,6 @@
         amogus = mkSystem {
           host = "amogus";
           system = "aarch64-linux";
-          type = "server";
-          nixpkgs = {
-            config.vim.gui = false;
-          };
-        };
-
-        # nix build .#nixosConfigurations.amogus-kexec.config.system.build.kexec_tarball
-        amogus-kexec = mkSystem {
-          host = "amogus";
-          system = "aarch64-linux";
-          type = "server";
-          modules = [
-            (import ./hosts/amogus-kexec/configuration.nix)
-          ];
           nixpkgs = {
             config.vim.gui = false;
           };
@@ -103,7 +90,11 @@
           users = [ "c" ];
           host = "lap-1";
           system = "x86_64-linux";
-          type = "laptop";
+        };
+
+        generic = mkSystem {
+          host = "generic";
+          system = "x86_64-linux";
         };
       };
     }
