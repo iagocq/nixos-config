@@ -11,23 +11,23 @@ in
       default = !config.device.isHomeManager;
     };
 
-    pool = mkOption {
+    base = mkOption {
       type = types.str;
       default = "rpool";
     };
 
     root = mkOption {
       type = types.str;
-      default = "${cfg.pool}/local/root";
+      default = "${cfg.base}/local/root";
     };
 
     mounts = mkOption {
       type = types.attrsOf types.anything;
       default = {
         "/" = { device = "${cfg.root}"; fsType = "zfs"; };
-        "/nix" = { device = "${cfg.pool}/local/nix"; fsType = "zfs"; };
-        "/home" = { device = "${cfg.pool}/safe/home"; fsType = "zfs"; };
-        "/persist" = { device = "${cfg.pool}/safe/persist"; fsType = "zfs"; };
+        "/nix" = { device = "${cfg.base}/local/nix"; fsType = "zfs"; };
+        "/home" = { device = "${cfg.base}/safe/home"; fsType = "zfs"; };
+        "/persist" = { device = "${cfg.base}/safe/persist"; fsType = "zfs"; };
       };
     };
 
@@ -39,7 +39,7 @@ in
     eyd = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = cfg.mount;
       };
 
       rollbackCommand = mkOption {
@@ -57,6 +57,7 @@ in
 
   config = mkIf cfg.enable {
     fileSystems = mkIf cfg.mount cfg.mounts;
+    networking.hostId = mkDefault cfg.hostId;
     boot = {
       initrd = {
         postDeviceCommands = mkIf cfg.eyd.enable (mkAfter cfg.eyd.rollbackCommand);
@@ -64,6 +65,17 @@ in
       };
       supportedFilesystems = [ "zfs" ];
     };
-    networking.hostId = mkDefault cfg.hostId;
+
+    services.openssh.hostKeys = mkIf cfg.eyd.enable [
+      {
+        path = "/persist/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+      {
+        path = "/persist/etc/ssh/ssh_host_rsa_key";
+        type = "rsa";
+        bits = 4096;
+      }
+    ];
   };
 }

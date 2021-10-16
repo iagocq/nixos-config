@@ -87,7 +87,7 @@
         };
 
         lap-1 = mkSystem {
-          users = [ "c" ];
+          users = [ "c" "iago" ];
           host = "lap-1";
           system = "x86_64-linux";
         };

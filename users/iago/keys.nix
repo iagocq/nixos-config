@@ -13,6 +13,7 @@ rec {
     raspberrypi = trusted.desktop-iago;
     amogus = trusted.desktop-iago;
     generic = trusted.desktop-iago;
+    lap-1 = trusted.desktop-iago;
   };
 
   age = with keys; [ desktop-iago desktop-iago-win raspberrypi ];

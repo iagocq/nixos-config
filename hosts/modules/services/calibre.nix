@@ -50,5 +50,17 @@ in
         enableBookUploading = cfg.uploading;
       };
     };
+
+    srv.nginx.vhosts.${cfg.domain} = mkIf cfg.vhost {
+      locations = {
+        "${cfg.baseUri}" = {
+          proxyPass = "http://${cfg.address}:${toString cfg.port}";
+          extraConfig = ''
+            proxy_set_header X-Script-Name ${cfg.baseUri};
+            proxy_set_header X-Scheme $scheme;
+          '';
+        };
+      };
+    };
   };
 }
