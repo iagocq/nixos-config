@@ -60,11 +60,17 @@ in
       type = types.bool;
       default = false;
     };
+
+    locale = mkOption {
+      type = types.str;
+      default = "en_US.UTF-8";
+    };
   };
 
   config = mkIf cfg.enable {
     time.timeZone = mkDefault "America/Sao_Paulo";
-    i18n.defaultLocale = mkDefault "en_US.UTF-8";
+    i18n.defaultLocale = mkDefault cfg.locale;
+
     console = mkDefault {
       font = "Lat2-Terminus16";
       keyMap = "br-abnt2";
@@ -82,7 +88,7 @@ in
         experimental-features = nix-command flakes
       '';
     };
-    
+
     environment.systemPackages = with pkgs; [
       vim htop file killall dnsutils coreutils lsof agenix
     ];

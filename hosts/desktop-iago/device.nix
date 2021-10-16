@@ -5,8 +5,8 @@
     type = "desktop";
 
     zfs = {
+      base = "rpool/crypt";
       hostId = "7afc33d0";
-      mount = false;
     };
 
     network = {

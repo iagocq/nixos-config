@@ -6,17 +6,25 @@
     ./device.nix
   ];
 
-  i18n.defaultLocale = "pt_BR.UTF-8";
+  boot = {
+    plymouth.enable = true;
+    loader.timeout = 1;
+  };
 
-  zramSwap.enable = true;
+  nix.trustedUsers = [ "root" "@wheel" ];
 
   users.users.c = {
     initialHashedPassword = "";
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
   };
 
   environment.systemPackages = with pkgs; [
     firefox libreoffice okular
+  ];
+
+  zramSwap.enable = true;
+
+  swapDevices = [
+    { device = "/dev/disk/by-label/swap"; }
   ];
 }

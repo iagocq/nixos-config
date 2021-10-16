@@ -16,14 +16,24 @@ in
       default = "grub";
     };
 
-    mountPoint = mkOption {
+    efiMountPoint = mkOption {
       type = types.str;
       default = "/boot/efi";
     };
 
-    label = mkOption {
+    efiDevice = mkOption {
       type = types.str;
-      default = "UEFI";
+      default = "/dev/disk/by-label/UEFI";
+    };
+
+    bootMountPoint = mkOption {
+      type = types.str;
+      default = "/boot";
+    };
+
+    bootDevice = mkOption {
+      type = types.str;
+      default = "/dev/disk/by-label/boot";
     };
 
     mount = mkOption {
@@ -47,7 +57,7 @@ in
       {
         efi = {
           canTouchEfiVariables = mkDefault (!cfg.removable);
-          efiSysMountPoint = mkDefault cfg.mountPoint;
+          efiSysMountPoint = mkDefault cfg.efiMountPoint;
         };
       }
 
@@ -68,6 +78,9 @@ in
       })
     ];
 
-    fileSystems.${cfg.mountPoint} = mkIf cfg.mount { label = cfg.label; };
+    fileSystems = mkIf cfg.mount {
+      ${cfg.efiMountPoint} = mkDefault { device = cfg.efiDevice; };
+      ${cfg.bootMountPoint} = mkDefault { device = cfg.bootDevice; };
+    };
   };
 }

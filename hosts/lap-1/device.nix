@@ -3,8 +3,8 @@
 {
   device = {
     type = "laptop";
+    locale = "pt_BR.UTF-8";
     zfs.hostId = "c9693126";
-
     network.backend = "networkmanager";
 
     graphics = {
