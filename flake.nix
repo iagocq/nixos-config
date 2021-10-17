@@ -95,8 +95,8 @@
           system = "x86_64-linux";
         };
 
-        generic = mkSystem {
-          host = "generic";
+        installer = mkSystem {
+          host = "installer";
           system = "x86_64-linux";
         };
       };
