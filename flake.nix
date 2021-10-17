@@ -19,7 +19,6 @@
 
   outputs = ({ ... }@inputs:
     let
-      config = import ./config;
       lib = import ./lib inputs;
 
       mkOverlays = { nixpkgs, system, overlays ? [] }:
@@ -36,8 +35,12 @@
         ] ++ overlays;
 
       mkSystem = { modules ? [], users ? [ "iago" ], ... }@args: lib.mkSystem ({
-        inherit (config) nixpkgs;
         inherit mkOverlays users;
+
+        nixpkgs = lib.nlib.attrsets.recursiveUpdate {
+          config.allowUnfree = true;
+        } args.nixpkgs or {};
+
         modules = [
           inputs.agenix.nixosModules.age
         ] ++ lib.nlib.attrsets.attrValues inputs.iago-nix.nixosModules
