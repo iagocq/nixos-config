@@ -1,5 +1,0 @@
-{
-  config = {
-    allowUnfree = true;
-  };
-}
