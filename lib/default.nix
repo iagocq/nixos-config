@@ -21,7 +21,7 @@ let
       (../hosts/modules)
       (../hosts + "/${host}/configuration.nix")
       {
-        networking.hostName = lib.mkDefault host;
+        networking.hostName = host;
         nix.registry.nixpkgs.flake = inputs.nixpkgs;
 
         nixpkgs = lib.attrsets.recursiveUpdate {

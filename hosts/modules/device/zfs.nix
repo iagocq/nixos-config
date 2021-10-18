@@ -57,7 +57,7 @@ in
 
   config = mkIf cfg.enable {
     fileSystems = mkIf cfg.mount cfg.mounts;
-    networking.hostId = mkDefault cfg.hostId;
+    networking.hostId = cfg.hostId;
     boot = {
       initrd = {
         postDeviceCommands = mkIf cfg.eyd.enable (mkAfter cfg.eyd.rollbackCommand);

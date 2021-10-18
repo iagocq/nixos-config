@@ -9,12 +9,13 @@
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
+    zfs.requestEncryptionCredentials = [ config.device.zfs.base ];
+
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "ohci_pci" "ehci_pci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
 
-      zfs.requestEncryptionCredentials = [ "rpool/crypt" ];
-
+      # mkpasswd -m sha-512 -S "helloWORLD" | sudo tee /secrets/zfs-key-desktop-iago
       luks.devices."secrets-desktop-iago" = {
         device = "/dev/disk/by-partlabel/secrets-desktop-iago";
         keyFile = "/dev/disk/by-partlabel/key-secrets-desktop-iago";
