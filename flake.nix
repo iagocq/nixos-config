@@ -98,6 +98,9 @@
         installer = mkSystem {
           host = "installer";
           system = "x86_64-linux";
+          nixpkgs = {
+            config.vim.gui = false;
+          };
         };
       };
     }
