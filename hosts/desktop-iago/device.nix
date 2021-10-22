@@ -11,6 +11,7 @@
 
     network = {
       interfaces.dhcp = [ "enp8s0" ];
+      firewall = false;
     };
 
     audio = {

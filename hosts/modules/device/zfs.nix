@@ -58,12 +58,15 @@ in
   config = mkIf cfg.enable {
     fileSystems = mkIf cfg.mount cfg.mounts;
     networking.hostId = cfg.hostId;
+
     boot = {
+      kernelParams = [ "nohibernate" ];
+      supportedFilesystems = [ "zfs" ];
+
       initrd = {
         postDeviceCommands = mkIf cfg.eyd.enable (mkAfter cfg.eyd.rollbackCommand);
         supportedFilesystems = [ "zfs" ];
       };
-      supportedFilesystems = [ "zfs" ];
     };
 
     services.openssh.hostKeys = mkIf cfg.eyd.enable [
