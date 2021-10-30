@@ -12,7 +12,7 @@
   spc.int.full.enable = true;
 
   networking = let network = config.spc.int.cfg.network; in {
-    nameservers = [ network.dnsServer ];
+    nameservers = [ network.dnsServer "1.1.1.1" ];
     domain = network.lanDomain;
     resolvconf.useLocalResolver = false;
   };
