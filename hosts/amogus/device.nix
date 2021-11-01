@@ -6,9 +6,11 @@
 
     uefi.removable = true;
 
-    zfs = {
-      mount = false;
-      hostId = "93faae55";
+    zfs.hostId = "93faae55";
+
+    network = {
+      interfaces.dhcp = [ "enp0s3" ];
+      firewall = false;
     };
   };
 }
