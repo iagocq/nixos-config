@@ -11,4 +11,6 @@
     kernelParams = [ "boot.shell_on_fail" ];
     initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
   };
+
+  device.uefi.mount = lib.mkIf (config.system.build ? kexec_tarball) false;
 }
