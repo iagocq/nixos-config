@@ -89,6 +89,14 @@
           };
         };
 
+        amogus-nomount = mkSystem {
+          host = "amogus-nomount";
+          system = "aarch64-linux";
+          nixpkgs = {
+            config.vim.gui = false;
+          };
+        };
+
         lap-1 = mkSystem {
           users = [ "c" "iago" ];
           host = "lap-1";
