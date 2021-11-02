@@ -89,6 +89,8 @@ in
       '';
     };
 
+    environment.noXlibs = false;
+
     environment.systemPackages = with pkgs; [
       vim htop file killall dnsutils coreutils lsof agenix
     ];
