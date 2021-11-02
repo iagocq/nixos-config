@@ -84,8 +84,14 @@
         };
 
         amogus-nomount = mkSystem {
-          host = "amogus-nomount";
+          host = "amogus";
           system = "aarch64-linux";
+          modules = [
+            {
+              device.uefi.mount = false;
+              device.zfs.mount = false;
+            }
+          ];
         };
 
         lap-1 = mkSystem {
