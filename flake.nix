@@ -76,25 +76,16 @@
         desktop-iago-win = mkSystem {
           host = "desktop-iago-win";
           system = "x86_64-linux";
-          nixpkgs = {
-            config.vim.gui = false;
-          };
         };
 
         amogus = mkSystem {
           host = "amogus";
           system = "aarch64-linux";
-          nixpkgs = {
-            config.vim.gui = false;
-          };
         };
 
         amogus-nomount = mkSystem {
           host = "amogus-nomount";
           system = "aarch64-linux";
-          nixpkgs = {
-            config.vim.gui = false;
-          };
         };
 
         lap-1 = mkSystem {
@@ -106,9 +97,6 @@
         installer = mkSystem {
           host = "installer";
           system = "x86_64-linux";
-          nixpkgs = {
-            config.vim.gui = false;
-          };
         };
       };
     }
