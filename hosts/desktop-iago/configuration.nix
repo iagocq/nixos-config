@@ -4,6 +4,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./device.nix
+    ../containers/gcc214.nix
   ];
 
   boot = {
