@@ -131,5 +131,11 @@
     version = "1.0.2";
     sha256 = "0rr5mz8g8myskgixiw76rwda8g955a1al8kk4s30b0byfaszia17";
   }
+  {
+    name = "foam-vscode";
+    publisher = "foam";
+    version = "0.14.1";
+    sha256 = "sha256-w9xGkezS3A9z6sTk8WWgW7g8qYX6mJFfRV0lv5cu160=";
+  }
 ];
 }

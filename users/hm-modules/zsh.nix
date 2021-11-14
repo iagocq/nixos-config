@@ -59,17 +59,23 @@ in
         LS_COLORS = builtins.readFile ./sh/LS_COLORS;
       };
 
-      initExtraBeforeCompInit = builtins.readFile (pkgs.substituteAll {
-        name = "init-extra-before-comp-init-zsh";
-        src = ./sh/init-extra-before-comp-init.zsh;
-        inherit (cfg) dot-dir;
-      });
+      initExtraBeforeCompInit =
+        let
+          initExtraBefore = pkgs.substituteAll {
+            name = "init-extra-before-comp-init-zsh";
+            src = ./sh/init-extra-before-comp-init.zsh;
+            inherit (cfg) dot-dir;
+          };
+        in "source ${initExtraBefore}";
 
-      initExtra = builtins.readFile (pkgs.substituteAll {
-        name = "init-extra-zsh";
-        src = ./sh/init-extra.zsh;
-        inherit zkbdkeymap;
-      });
+      initExtra =
+        let
+          initExtra = pkgs.substituteAll {
+            name = "init-extra-zsh";
+            src = ./sh/init-extra.zsh;
+            inherit zkbdkeymap;
+          };
+        in "source ${initExtra}";
 
       plugins = cfg.plugins;
     };

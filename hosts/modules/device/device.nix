@@ -84,8 +84,14 @@ in
 
     nix = {
       package = pkgs.nixUnstable;
+      binaryCaches = lib.mkForce [
+        "https://cache.ngi0.nixos.org/"
+      ];
+      binaryCachePublicKeys = lib.mkForce [
+        "cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA="
+      ];
       extraOptions = ''
-        experimental-features = nix-command flakes
+        experimental-features = nix-command flakes ca-derivations ca-references
       '';
     };
 
@@ -103,5 +109,12 @@ in
       passwordAuthentication = mkDefault false;
       permitRootLogin = mkDefault "no";
     };
+
+    security.pam.loginLimits = [{
+      domain = "*";
+      type = "soft";
+      item = "nofile";
+      value = "8192";
+    }];
   };
 }

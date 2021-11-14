@@ -38,6 +38,8 @@
     };
   };
 
+  nix.buildCores = 6;
+
   programs.gnupg.agent.enable = true;
 
   swapDevices = [

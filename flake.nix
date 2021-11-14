@@ -38,7 +38,10 @@
         inherit mkOverlays users;
 
         nixpkgs = lib.nlib.attrsets.recursiveUpdate {
-          config.allowUnfree = true;
+          config = {
+            allowUnfree = true;
+            contentAddressedByDefault = true;
+          };
         } args.nixpkgs or {};
 
         modules = [
