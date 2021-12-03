@@ -4,7 +4,6 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./device.nix
-    ../containers/gcc214.nix
   ];
 
   boot = {
@@ -42,7 +41,7 @@
   programs.gnupg.agent.enable = true;
 
   swapDevices = [
-    #{ device = "/dev/disk/by-uuid/fe31e3c0-e5d7-48b1-8446-716eb8a459c1"; }
+    { device = "/dev/disk/by-partlabel/swap"; }
   ];
 
   system.stateVersion = "20.09";
