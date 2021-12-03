@@ -15,8 +15,4 @@
   services.gitlab-runner = {
     enable = true;
   };
-
-  systemd.tmpfiles.rules = [
-    "L /var/lib/private/gitlab-runner - - - - /persist/var/lib/private/gitlab-runner"
-  ];
 }

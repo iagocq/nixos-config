@@ -54,8 +54,10 @@ in
     })
     (mkIf (cfg.backend == "networkmanager") {
       networking.networkmanager.enable = true;
-      environment.etc."NetworkManager/system-connections" = mkIf eyd.enable {
-        source = "/persist/etc/NetworkManager/system-connections";
+      device.zfs.eyd.persist = {
+        files = [
+          "/etc/NetworkManager/system-connections"
+        ];
       };
     })
   ]);

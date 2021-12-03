@@ -25,9 +25,9 @@ in
       type = types.attrsOf types.anything;
       default = {
         "/" = { device = "${cfg.root}"; fsType = "zfs"; };
-        "/nix" = { device = "${cfg.base}/local/nix"; fsType = "zfs"; };
-        "/home" = { device = "${cfg.base}/safe/home"; fsType = "zfs"; };
-        "/persist" = { device = "${cfg.base}/safe/persist"; fsType = "zfs"; };
+        "/nix" = { device = "${cfg.base}/local/nix"; fsType = "zfs"; neededForBoot = true; };
+        "/home" = { device = "${cfg.base}/safe/home"; fsType = "zfs"; neededForBoot = true; };
+        "/persist" = { device = "${cfg.base}/safe/persist"; fsType = "zfs"; neededForBoot = true; };
       };
     };
 
@@ -47,6 +47,11 @@ in
         default = ''
           zfs rollback -r ${cfg.root}@blank
         '';
+      };
+
+      persist = mkOption {
+        type = types.attrsOf (types.listOf types.str);
+        default = {};
       };
     };
 
@@ -69,16 +74,11 @@ in
       };
     };
 
-    services.openssh.hostKeys = mkIf cfg.eyd.enable [
-      {
-        path = "/persist/etc/ssh/ssh_host_ed25519_key";
-        type = "ed25519";
-      }
-      {
-        path = "/persist/etc/ssh/ssh_host_rsa_key";
-        type = "rsa";
-        bits = 4096;
-      }
-    ];
+    environment.persistence."/persist" = mkIf cfg.eyd.enable (recursiveUpdate cfg.eyd.persist {
+      files = [
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_rsa_key"
+      ];
+    });
   };
 }
