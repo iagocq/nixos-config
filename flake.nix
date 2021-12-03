@@ -14,6 +14,8 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    impermanence.url = "github:nix-community/impermanence";
+
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
   };
 
@@ -43,6 +45,7 @@
 
         modules = [
           inputs.agenix.nixosModules.age
+          inputs.impermanence.nixosModules.impermanence
         ] ++ lib.nlib.attrsets.attrValues inputs.iago-nix.nixosModules
           ++ modules;
       } // removeAttrs args [ "modules" ]);
