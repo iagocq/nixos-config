@@ -11,4 +11,12 @@
     kernelParams = [ "boot.shell_on_fail" ];
     initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
   };
+
+  services.gitlab-runner = {
+    enable = true;
+  };
+
+  systemd.tmpfiles.rules = [
+    "L /var/lib/private/gitlab-runner - - - - /persist/var/lib/private/gitlab-runner"
+  ];
 }
