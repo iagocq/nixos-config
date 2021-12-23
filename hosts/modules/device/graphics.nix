@@ -39,7 +39,7 @@ in
     };
 
     de = mkOption {
-      type = types.enum [ "none" "xfce" "kde" ];
+      type = types.enum [ "none" "xfce" "plasma" ];
       default = "xfce";
     };
 
@@ -81,6 +81,10 @@ in
             enable = true;
             noDesktop = mkDefault (cfg.wm != "none");
             enableXfwm = mkDefault (cfg.wm == "none");
+          };
+
+          plasma5 = mkIf (cfg.de == "plasma") {
+            enable = true;
           };
         };
 
