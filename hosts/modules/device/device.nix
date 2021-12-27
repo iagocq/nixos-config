@@ -89,13 +89,15 @@ in
       '';
     };
 
+    programs.zsh.enable = true;
+
+    environment.etc.zinputrc.text = mkForce "";
+
     environment.noXlibs = false;
 
     environment.systemPackages = with pkgs; [
       vim htop file killall dnsutils coreutils lsof agenix
     ];
-
-    environment.shells = [ pkgs.zsh ];
 
     services.openssh = {
       enable = mkDefault true;

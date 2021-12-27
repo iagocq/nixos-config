@@ -12,7 +12,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [ ! -e "/run/current-system" ]; then
-    /nix/var/nix/profiles/system/activate
+    LANG="C.UTF-8" /nix/var/nix/profiles/system/activate
 fi
 
 if [ ! -e "/run/systemd.pid" ]; then
@@ -20,7 +20,29 @@ if [ ! -e "/run/systemd.pid" ]; then
         LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
         @daemonize@/bin/daemonize /run/current-system/sw/bin/unshare -fp --mount-proc systemd
     /run/current-system/sw/bin/pgrep -xf systemd > /run/systemd.pid
+
+    status=1
+    while [[ $status -gt 0 ]]; do
+        $sw/sleep 1
+        status=0
+        $sw/nsenter -t $(< /run/systemd.pid) -p -m -- \
+                    $sw/systemctl is-system-running -q --wait 2>/dev/null \
+            || status=$?
+    done
 fi
 
 userShell=$($sw/getent passwd @defaultUser@ | $sw/cut -d: -f7)
-exec $sw/nsenter -t $(< /run/systemd.pid) -p -m --wd="$PWD" -- @wrapperDir@/su -s $userShell @defaultUser@ "$@"
+if [[ $# -gt 0 ]]; then
+    # wsl seems to prefix with "-c"
+    shift
+    cmd="$@"
+else
+    cmd="$userShell"
+fi
+
+# Pass external environment but filter variables specific to root user.
+exportCmd="$(export -p | $sw/grep -vE ' (HOME|LOGNAME|SHELL|USER)='); export WSLPATH=\"$PATH\""
+
+exec $sw/nsenter -t $(< /run/systemd.pid) -p -m -- $sw/machinectl -q \
+	--uid=@defaultUser@ shell .host /bin/sh -c \
+	"cd \"$PWD\"; $exportCmd; exec $cmd"
