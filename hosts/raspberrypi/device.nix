@@ -12,9 +12,16 @@
     };
 
     network = {
-      interfaces.static.eth0.ipv4 = let network = config.spc.int.cfg.network or {}; in {
-        addresses = network.server.addresses or [];
-        routes = [ (network.defaultRoute or {}) ];
+      wireless = true;
+
+      interfaces.static = let network = config.spc.int.cfg.network or {}; in rec {
+        eth0.ipv4 = {
+          addresses = network.server.addresses or [];
+        };
+
+        wlan0.ipv4 = eth0.ipv4 // {
+          routes = [ (network.defaultRoute or {}) ];
+        };
       };
     };
   };
