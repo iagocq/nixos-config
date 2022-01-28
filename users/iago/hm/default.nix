@@ -24,6 +24,7 @@ in
   custom.vim.enable = true;
   custom.shell.enable = true;
   custom.zsh.enable = true;
+  custom.direnv.enable = true;
   custom.zsh.plugins = [
     {
       name = "fast-syntax-highlighting";
