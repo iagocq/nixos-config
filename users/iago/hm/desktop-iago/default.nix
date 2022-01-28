@@ -61,7 +61,6 @@
   custom.picom.enable = true;
   custom.mpv.enable = true;
   custom.streamlink.enable = true;
-  custom.direnv.enable = true;
   custom.vscode.enable = true;
   custom.firefox.enable = true;
 
