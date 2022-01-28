@@ -5,6 +5,8 @@ else
   echo "Could not load keymap. Run zkbd to create one."
 fi
 
+bindkey -e
+
 [[ -n ${key[Delete]} ]] && bindkey "${key[Delete]}" delete-char
 [[ -n ${key[Home]}   ]] && bindkey "${key[Home]}"   beginning-of-line
 [[ -n ${key[End]}    ]] && bindkey "${key[End]}"    end-of-line
