@@ -39,6 +39,7 @@
         agenix.nixosModules.age
         impermanence.nixosModules.impermanence
         iago-nix.nixosModules.lightspeed
+        { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
       ];
 
       nixpkgsConfig = {

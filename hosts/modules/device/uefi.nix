@@ -23,7 +23,7 @@ in
 
     efiDevice = mkOption {
       type = types.str;
-      default = "/dev/disk/by-label/UEFI";
+      default = "/dev/disk/by-partlabel/UEFI";
     };
 
     bootMountPoint = mkOption {
