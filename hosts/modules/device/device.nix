@@ -84,9 +84,15 @@ in
 
     nix = {
       package = pkgs.nixUnstable;
+      autoOptimiseStore = mkDefault cfg.isDesktop;
       extraOptions = ''
         experimental-features = nix-command flakes
       '';
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 30d";
+      };
     };
 
     programs.zsh.enable = true;

@@ -2,14 +2,14 @@
 rec {
   loadUsers = users: user-list:
     builtins.listToAttrs
-      (map (x: rec { name = x; a = if users ? ${x} then x else "default"; value = users.${a}; }) user-list);
+      (map (x: rec { name = x; value = users.${x} or users.default; }) user-list);
 
   listOf = attrname: users:
     builtins.attrValues (attrsOf attrname users);
 
   attrsOf = attrname: users:
     lib.attrsets.filterAttrs (n: v: v != {})
-      (lib.attrsets.mapAttrs (n: v: if v ? ${attrname} then v.${attrname} else {}) users);
+      (lib.attrsets.mapAttrs (n: v: v.${attrname} or {}) users);
 
   mkKeyFile = key:
     let k = { pub = key; desc = builtins.elemAt (builtins.split " " key) 4; };

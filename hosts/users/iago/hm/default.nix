@@ -1,11 +1,10 @@
 { config, lib, pkgs, host ? "default", ... }:
 
 let
-  host-path = ./. + "/${host}";
-  host-import = if builtins.pathExists host-path then [ host-path ] else [ ];
+  hostPath = ./. + "/${host}";
 in
 {
-  imports = host-import;
+  imports = lib.optionals (builtins.pathExists hostPath) [ hostPath ];
 
   home.packages = with pkgs; [
     calc git git-crypt
@@ -28,7 +27,7 @@ in
   custom.zsh.plugins = [
     {
       name = "fast-syntax-highlighting";
-      src = pkgs.zsh-fast-syntax-highlighting.src;
+      src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
     }
   ];
 

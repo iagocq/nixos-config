@@ -1,6 +1,6 @@
 { lib ? {}, pkgs ? {} }:
 let
-  users = import ../users.nix { inherit lib pkgs;  };
+  users = import ../../users.nix { inherit lib pkgs;  };
   root = users.root.keys.age.internal;
 in
 rec {
