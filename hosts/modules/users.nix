@@ -1,1 +1,1 @@
-import ../users.nix
+import ../users

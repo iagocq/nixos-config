@@ -7,13 +7,12 @@
     obs-studio logisim feh chatterino2
     lutris steam qjackctl pavucontrol
     carla calibre tribler qgis libreoffice-fresh
-
-    #ungoogled-chromium
-    multimc ripcord
-    openttd
+    ungoogled-chromium
+    ripcord openttd
+    polymc
 
     # Command line applications
-    youtube-dl ffmpeg-full calc git
+    yt-dlp ffmpeg-full calc git
     neofetch
     telegram-send
     gdb valgrind rr

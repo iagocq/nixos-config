@@ -4,6 +4,5 @@
   imports = [
     ./device
     ./services
-    ./specialized
   ];
 }

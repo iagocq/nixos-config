@@ -9,7 +9,7 @@
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    zfs.requestEncryptionCredentials = [ config.device.zfs.base ];
+    zfs.requestEncryptionCredentials = [ "rpool/crypt" "ssd/crypt" ];
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "ohci_pci" "ehci_pci" "usb_storage" "usbhid" "sd_mod" ];
@@ -39,6 +39,12 @@
   };
 
   programs.gnupg.agent.enable = true;
+
+  fileSystems."/nix" = lib.mkForce {
+    device = "ssd/crypt/local/nix";
+    fsType = "zfs";
+    neededForBoot = true;
+  };
 
   swapDevices = [
     { device = "/dev/disk/by-partlabel/swap"; }

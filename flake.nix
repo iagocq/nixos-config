@@ -21,34 +21,40 @@
 
   outputs = ({ ... }@inputs:
     let
-      lib = import ./lib inputs;
+      lib = import ./lib.nix { inherit (inputs) nixpkgs home-manager; };
 
-      mkOverlays = { nixpkgs, system, overlays ? [] }:
+      flakeOverlays = cfg:
         let
-          cfg-final = nixpkgs // { inherit system; };
-          tribler-npkgs = import inputs.tribler-nixpkgs cfg-final;
+          tribler-nixpkgs = import inputs.tribler-nixpkgs cfg;
         in
         [
           (final: prev: {
-            tribler = tribler-npkgs.pkgs.tribler;
+            tribler = tribler-nixpkgs.pkgs.tribler;
           })
           inputs.iago-nix.overlay
           inputs.agenix.overlay
-        ] ++ overlays;
+        ];
 
-      mkSystem = { modules ? [], users ? [ "iago" ], ... }@args: lib.mkSystem ({
+      flakeModules = with inputs; [
+        agenix.nixosModules.age
+        impermanence.nixosModules.impermanence
+        iago-nix.nixosModules.lightspeed
+      ];
+
+      nixpkgsConfig = {
+        config.allowUnfree = true;
+      };
+
+      mkOverlays = { nixpkgs, system, overlays ? [] }:
+        flakeOverlays (nixpkgs // { inherit system; })
+        ++ overlays;
+
+      mkSystem = { modules ? [], users ? [ "iago" ], nixpkgs ? {}, ... }@args: lib.mkSystem (args // {
         inherit mkOverlays users;
 
-        nixpkgs = lib.nlib.attrsets.recursiveUpdate {
-          config.allowUnfree = true;
-        } args.nixpkgs or {};
-
-        modules = [
-          inputs.agenix.nixosModules.age
-          inputs.impermanence.nixosModules.impermanence
-        ] ++ lib.nlib.attrsets.attrValues inputs.iago-nix.nixosModules
-          ++ modules;
-      } // removeAttrs args [ "modules" ]);
+        nixpkgs = lib.attrsets.recursiveUpdate nixpkgsConfig nixpkgs;
+        modules = flakeModules ++ modules;
+      });
     in
     {
       nixosConfigurations = {

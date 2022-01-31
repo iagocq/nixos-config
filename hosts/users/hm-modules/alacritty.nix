@@ -22,7 +22,7 @@ in
     programs.alacritty = mkIf cfg.enable {
       enable = true;
       settings = {
-        background_opacity = 0.7;
+        window.opacity = 0.7;
         colors = {
           # Default colors
           primary = {
