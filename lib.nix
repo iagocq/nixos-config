@@ -9,7 +9,8 @@ let
   , type ? "unknown"
   , home-manager ? true
   , users ? []
-  , hostsPath ? ./.
+  , rootPath ? ./.
+  , hostsPath ? "${rootPath}/hosts"
   , modules ? []
   , nixpkgs ? {}
   , overlays ? []
@@ -24,10 +25,10 @@ let
     in {
       inherit specialArgs;
       modules = modules ++ [
-        "${hostsPath}/device"
-        "${hostsPath}/services"
-        "${hostsPath}/specialized"
-        "${hostsPath}/users"
+        "${rootPath}/device"
+        "${rootPath}/services"
+        "${rootPath}/specialized"
+        "${rootPath}/users"
         "${hostsPath}/${host}/configuration.nix"
         ({ options, ...}: {
           networking.hostName = host;
@@ -56,8 +57,8 @@ let
             useGlobalPkgs = true;
             useUserPackages = true;
             sharedModules = [
-              "${hostsPath}/device"
-              "${hostsPath}/hm-modules"
+              "${rootPath}/device"
+              "${rootPath}/hm-modules"
               "${hostsPath}/${host}/device.nix"
             ];
             extraSpecialArgs = specialArgs // { isHomeManager = true; };
