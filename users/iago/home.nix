@@ -30,6 +30,7 @@ in
       src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
     }
   ];
+  services.sxhkd.enable = true;
 
   home.username = "iago";
   home.homeDirectory = "/home/iago-nixos";

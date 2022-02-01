@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isHomeManager ? false, ... }:
 
 with lib;
 let
@@ -8,7 +8,7 @@ in
   options.device.zfs = {
     enable = mkOption {
       type = types.bool;
-      default = !config.device.isHomeManager;
+      default = true;
     };
 
     base = mkOption {
@@ -60,7 +60,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     fileSystems = mkIf cfg.mount cfg.mounts;
     networking.hostId = cfg.hostId;
 
@@ -90,5 +90,5 @@ in
       autoScrub.enable = true;
       autoSnapshot.enable = true;
     };
-  };
+  } else {};
 }

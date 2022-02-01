@@ -8,7 +8,6 @@
     ./graphics.nix
     ./network.nix
     ./printing.nix
-    ./users.nix
     ./zfs.nix
   ];
 }

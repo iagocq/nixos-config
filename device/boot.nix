@@ -1,14 +1,14 @@
-{ config, lib, ... }:
+{ config, lib, isHomeManager ? false, ... }:
 
 with lib;
 let
-  cfg = config.device.uefi;
+  cfg = config.device.boot;
 in
 {
-  options.device.uefi = {
+  options.device.boot = {
     enable = mkOption {
       type = types.bool;
-      default = !config.device.isHomeManager;
+      default = true;
     };
 
     bootloader = mkOption {
@@ -57,7 +57,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     boot = {
       loader = mkMerge [
         {
@@ -98,6 +98,6 @@ in
       ${cfg.efiMountPoint} = mkIf cfg.efi (mkDefault { device = cfg.efiDevice; });
       ${cfg.bootMountPoint} = mkDefault { device = cfg.bootDevice; };
     };
-  };
+  } else {};
 
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isHomeManager ? false, ... }:
 
 with lib;
 let
@@ -8,11 +8,11 @@ in
   options.device.printing = {
     enable = mkOption {
       type = types.bool;
-      default = with config.device; isPc && !isHomeManager;
+      default = config.device.isPc;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     services.printing.enable = true;
     services.avahi = {
       enable = true;
@@ -24,5 +24,5 @@ in
         userServices = true;
       };
     };
-  };
+  } else {};
 }

@@ -4,7 +4,7 @@
   device = {
     type = "server";
 
-    uefi.removable = true;
+    boot.removable = true;
 
     zfs = {
       hostId = "93faae55";

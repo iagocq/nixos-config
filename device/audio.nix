@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }@args:
+{ config, lib, pkgs, isHomeManager ? false, ... }@args:
 
 with lib;
 let
@@ -9,7 +9,7 @@ in
   options.device.audio = {
     enable = mkOption {
       type = types.bool;
-      default = with config.device; hasAudio && !isHomeManager;
+      default = config.device.hasAudio;
     };
 
     backend = mkOption {
@@ -148,7 +148,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     services.pipewire = mkIf (cfg.backend == "pipewire") {
       enable = true;
       alsa.enable = true;
@@ -208,5 +208,5 @@ in
     };
 
     security.rtkit.enable = mkDefault cfg.realtime;
-  };
+  } else {};
 }
