@@ -98,9 +98,7 @@ in
     programs.zsh.enable = true;
 
     environment.etc.zinputrc.text = mkForce "";
-
     environment.noXlibs = false;
-
     environment.systemPackages = with pkgs; [
       vim htop file killall dnsutils coreutils lsof agenix
     ];
@@ -109,7 +107,12 @@ in
       enable = mkDefault true;
       useDns = mkDefault true;
       passwordAuthentication = mkDefault false;
+      kbdInteractiveAuthentication = mkDefault false;
       permitRootLogin = mkDefault "no";
     };
+
+    security.sudo.extraConfig = ''
+      Defaults lecture = never
+    '';
   };
 }
