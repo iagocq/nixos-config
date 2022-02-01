@@ -9,7 +9,7 @@ let
   , type ? "unknown"
   , home-manager ? true
   , users ? []
-  , hostsPath ? ./hosts
+  , hostsPath ? ./.
   , usersPath ? "${hostsPath}/users"
   , modules ? []
   , nixpkgs ? {}
