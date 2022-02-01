@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isHomeManager ? false, home-manager ? false, ... }:
 
 with lib;
 let
@@ -8,7 +8,7 @@ in
   options.device = {
     enable = mkOption {
       type = types.bool;
-      default = !cfg.isHomeManager;
+      default = true;
     };
 
     type = mkOption {
@@ -58,7 +58,12 @@ in
 
     isHomeManager = mkOption {
       type = types.bool;
-      default = false;
+      default = isHomeManager;
+    };
+
+    homeManagerEnabled = mkOption {
+      type = types.bool;
+      default = home-manager;
     };
 
     locale = mkOption {
@@ -67,7 +72,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     time.timeZone = mkDefault "America/Sao_Paulo";
     i18n.defaultLocale = mkDefault cfg.locale;
 
@@ -114,5 +119,5 @@ in
     security.sudo.extraConfig = ''
       Defaults lecture = never
     '';
-  };
+  } else {};
 }

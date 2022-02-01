@@ -4,7 +4,7 @@
   device = {
     type = "embedded";
 
-    uefi.bootloader = "extlinux";
+    boot.bootloader = "extlinux";
 
     zfs = {
       hostId = "40cf60c9";

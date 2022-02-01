@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, isHomeManager ? false, ... }:
 
 with lib;
 let
@@ -9,7 +9,7 @@ in
   options.device.network = {
     enable = mkOption {
       type = types.bool;
-      default = !config.device.isHomeManager;
+      default = true;
     };
 
     firewall = mkOption {
@@ -40,7 +40,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = if !isHomeManager then mkIf cfg.enable (mkMerge [
     (mkIf (cfg.backend == "dhcpcd") {
       networking = {
         firewall.enable = mkDefault cfg.firewall;
@@ -60,5 +60,5 @@ in
         ];
       };
     })
-  ]);
+  ]) else {};
 }

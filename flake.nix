@@ -1,4 +1,3 @@
-
 {
   description = "Iago's NixOS system configuration flake";
 
@@ -98,7 +97,7 @@
           system = "aarch64-linux";
           modules = [
             {
-              device.uefi.mount = false;
+              device.boot.mount = false;
               device.zfs.mount = false;
             }
           ];

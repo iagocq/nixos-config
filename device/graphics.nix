@@ -1,4 +1,4 @@
-{ config, lib, pkgs, mainUser, ... }:
+{ config, lib, pkgs, isHomeManager ? false, ... }:
 
 with lib;
 let
@@ -8,7 +8,7 @@ in
   options.device.graphics = {
     enable = mkOption {
       type = types.bool;
-      default = with config.device; isGraphical && !isHomeManager;
+      default = config.device.isGraphical;
     };
 
     backend = mkOption {
@@ -56,7 +56,7 @@ in
     };
   };
   
-  config = mkIf cfg.enable {
+  config = if !isHomeManager then mkIf cfg.enable {
     hardware.opengl.driSupport32Bit = mkDefault true;
 
     services.xserver = mkIf (cfg.backend == "x") (mkMerge [
@@ -96,5 +96,5 @@ in
         };
       }
     ]);
-  };
+  } else {};
 }

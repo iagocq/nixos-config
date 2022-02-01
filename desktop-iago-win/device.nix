@@ -4,7 +4,7 @@
   device = {
     type = "embedded";
 
-    uefi.enable = false;
+    boot.enable = false;
     network.enable = false;
 
     zfs = {
