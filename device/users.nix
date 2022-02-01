@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.device.users;
 
-  allUsers = import ../users.nix { inherit lib pkgs; };
+  allUsers = import ../users { inherit lib pkgs; };
   ulib = allUsers.lib;
 in
 {

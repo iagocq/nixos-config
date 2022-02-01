@@ -1,8 +1,7 @@
-{ ... }:
-
 {
   imports = [
     ./device
     ./services
+    ./specialized
   ];
 }

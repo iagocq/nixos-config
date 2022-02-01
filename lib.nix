@@ -20,7 +20,7 @@ let
     in {
       inherit specialArgs;
       modules = modules ++ [
-        "${hostsPath}/modules"
+        "${hostsPath}/modules.nix"
         "${hostsPath}/${host}/configuration.nix"
         {
           networking.hostName = host;
