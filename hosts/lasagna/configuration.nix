@@ -15,19 +15,19 @@
       availableKernelModules = [ "xhci_pci" "ahci" "ohci_pci" "ehci_pci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
 
-      # mkpasswd -m sha-512 -S "helloWORLD" | sudo tee /secrets/zfs-key-desktop-iago
-      luks.devices."secrets-desktop-iago" = {
-        device = "/dev/disk/by-partlabel/secrets-desktop-iago";
-        keyFile = "/dev/disk/by-partlabel/key-secrets-desktop-iago";
+      # mkpasswd -m sha-512 -S "helloWORLD" | sudo tee /secrets/zfs-key-lasagna
+      luks.devices."secrets-lasagna" = {
+        device = "/dev/disk/by-partlabel/secrets-lasagna";
+        keyFile = "/dev/disk/by-partlabel/key-secrets-lasagna";
         fallbackToPassword = true;
         postOpenCommands = ''
-          specialMount /dev/mapper/secrets-desktop-iago /secrets "" ext4
+          specialMount /dev/mapper/secrets-lasagna /secrets "" ext4
         '';
       };
 
       postMountCommands = ''
         umount /secrets
-        cryptsetup close secrets-desktop-iago
+        cryptsetup close secrets-lasagna
       '';
     };
 

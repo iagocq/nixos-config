@@ -13,8 +13,8 @@ in
     };
   };
 
-  config = {
-    programs.direnv = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
       stdlib = ''

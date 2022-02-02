@@ -58,19 +58,19 @@
     in
     {
       nixosConfigurations = {
-        desktop-iago = mkSystem {
-          host = "desktop-iago";
+        lasagna = mkSystem {
+          host = "lasagna";
           system = "x86_64-linux";
         };
 
-        raspberrypi = mkSystem {
-          host = "raspberrypi";
+        pie = mkSystem {
+          host = "pie";
           system = "aarch64-linux";
         };
 
-        # nix build .#nixosConfigurations.raspberrypi-sd-image.config.system.build.sdImage
-        raspberrypi-sd-image = mkSystem {
-          host = "raspberrypi";
+        # nix build .#nixosConfigurations.pie-sd-image.config.system.build.sdImage
+        pie-sd-image = mkSystem {
+          host = "pie";
           system = "aarch64-linux";
           modules = [
             ({ modulesPath, ...}: import "${modulesPath}/installer/sd-card/sd-image-aarch64-installer.nix")
@@ -81,19 +81,19 @@
           ];
         };
 
-        # nix build .#nixosConfigurations.desktop-iago-win.config.system.build.tarball
-        desktop-iago-win = mkSystem {
+        # nix build .#nixosConfigurations.moldy-lasagna.config.system.build.tarball
+        moldy-lasagna = mkSystem {
           host = "desktop-iago-win";
           system = "x86_64-linux";
         };
 
-        amogus = mkSystem {
-          host = "amogus";
+        pineapple = mkSystem {
+          host = "pineapple";
           system = "aarch64-linux";
         };
 
-        amogus-nomount = mkSystem {
-          host = "amogus";
+        pineapple-no-mount = mkSystem {
+          host = "pineapple";
           system = "aarch64-linux";
           modules = [
             {

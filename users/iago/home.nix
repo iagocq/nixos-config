@@ -7,7 +7,7 @@ in
   imports = lib.optionals (builtins.pathExists hostPath) [ hostPath ];
 
   home.packages = with pkgs; [
-    calc git git-crypt
+    calc git
     neofetch
     zip unzip p7zip atool
     man-pages posix_man_pages
@@ -30,7 +30,6 @@ in
       src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
     }
   ];
-  services.sxhkd.enable = true;
 
   home.username = "iago";
   home.homeDirectory = "/home/iago-nixos";

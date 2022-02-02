@@ -18,8 +18,9 @@ in
     };
   };
 
-  config = {
-    programs.alacritty = mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    custom.terminal.cmd = cfg.cmd;
+    programs.alacritty = {
       enable = true;
       settings = {
         window.opacity = 0.7;

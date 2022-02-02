@@ -121,7 +121,7 @@ in
       };
 
       server = {
-        host = "raspberrypi";
+        host = "pie";
         mainAddress = "${net}10";
         addresses = [
           { address = "${net}10"; prefixLength = 24; }
