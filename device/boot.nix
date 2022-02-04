@@ -33,7 +33,7 @@ in
 
     bootDevice = mkOption {
       type = types.str;
-      default = "/dev/disk/by-label/boot";
+      default = "/dev/disk/by-partlabel/boot";
     };
 
     mount = mkOption {
