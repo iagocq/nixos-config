@@ -3,7 +3,6 @@
 with lib;
 let
   cfg = config.spc.int.nginx;
-  int-cfg = config.spc.int.cfg;
 in
 {
   options.spc.int.nginx = {
@@ -11,11 +10,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    srv.nginx = mkMerge [
-      { enable = true; }
-      ( removeAttrs int-cfg.nginx [ "secrets" ] )
-    ];
-
-    spc.int.secrets = int-cfg.nginx.secrets or [];
+    srv.nginx = {
+      domain = config.spc.int.network.domain;
+      dynamicResolving = false;
+    };
   };
 }

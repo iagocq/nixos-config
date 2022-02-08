@@ -4,7 +4,7 @@
   device = {
     type = "server";
 
-    boot.bootloader = "grub";
+    boot.loader = "grub";
     boot.removable = true;
 
     zfs = {

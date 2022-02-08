@@ -3,7 +3,6 @@
 with lib;
 let
   cfg = config.spc.int.calibre;
-  int-cfg = config.spc.int.cfg;
 in
 {
   options.spc.int.calibre = {
@@ -11,11 +10,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    srv.calibre = mkMerge [
-      { enable = true; }
-      ( removeAttrs int-cfg.calibre [ "secrets" ] )
-    ];
-
-    spc.int.secrets = int-cfg.calibre.secrets or [];
+    srv.calibre = {
+      enable = true;
+      address = "127.0.0.1";
+      baseUri = "/calibre";
+      port = 8094;
+    };
   };
 }

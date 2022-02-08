@@ -4,7 +4,7 @@
   device = {
     type = "embedded";
 
-    boot.bootloader = "extlinux";
+    boot.loader = "raspberrypi";
 
     zfs = {
       hostId = "40cf60c9";
@@ -14,7 +14,7 @@
     network = {
       wireless = true;
 
-      interfaces.static = let network = config.spc.int.cfg.network or {}; in rec {
+      interfaces.static = let network = config.spc.int.network; in rec {
         eth0.ipv4 = {
           addresses = network.server.addresses or [];
         };

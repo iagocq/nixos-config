@@ -1,4 +1,4 @@
-{ config, lib, pkgs, isHomeManager ? false, ... }:
+{ config, lib, options, pkgs, isHomeManager ? false, ... }:
 
 with lib;
 let
@@ -34,7 +34,7 @@ in
       };
 
       static = mkOption {
-        type = types.attrsOf types.anything;
+        type = options.networking.interfaces.type;
         default = { };
       };
     };

@@ -5,12 +5,11 @@
     ./acme.nix
     ./bitwarden.nix
     ./calibre.nix
-    ./cfg.nix
     ./dhcp.nix
     ./dns.nix
     ./full.nix
   # ./jellyfin.nix
+    ./network.nix
     ./nginx.nix
-    ./sec.nix
   ];
 }

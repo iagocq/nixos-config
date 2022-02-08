@@ -45,22 +45,30 @@
   custom.terminal.cmd = config.custom.alacritty.cmd;
   custom.rofi.enable = true;
   custom.i3-xfce.enable = true;
-  custom.i3 = {
-    menu = config.custom.rofi.cmd;
-    screenshot = builtins.replaceStrings [ "\\\n" ] [ "" ] ''
-      maim=${pkgs.maim}/bin/maim \
-      feh=${pkgs.feh}/bin/feh \
-      xdotool=${pkgs.xdotool}/bin/xdotool \
-      xclip=${pkgs.xclip}/bin/xclip \
-      ${(pkgs.writeScript "screenshot" (builtins.readFile ./screenshot.sh)).outPath} \
-    '';
-    login = "${(pkgs.writeScript "login" (builtins.readFile ./login.sh)).outPath}";
-  };
+  custom.i3 =
+    let
+      wrapScript = name: args: toString (pkgs.writeShellScript name "source ${pkgs.substituteAll args}");
+    in
+    {
+      menu = config.custom.rofi.cmd;
+      screenshot = wrapScript "screenshot" {
+        inherit (pkgs) maim feh xdotool xclip;
+        src = ./screenshot.sh;
+      };
+
+      login = wrapScript "login" {
+        inherit (pkgs) firefox tdesktop discord pipewire;
+        src = ./login.sh;
+      };
+    };
 
   custom.picom.enable = true;
   custom.mpv.enable = true;
   custom.streamlink.enable = true;
   custom.vscode.enable = true;
+  custom.vscode.extra-exts = with pkgs.vscode-extensions; [
+    redhat.java matklad.rust-analyzer
+  ];
   custom.firefox.enable = true;
 
   # This value determines the Home Manager release that your

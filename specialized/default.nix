@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./server/internal
-    ./server/external
+    ./internal
+    ./external
   ];
 }

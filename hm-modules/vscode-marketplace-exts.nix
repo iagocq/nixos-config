@@ -30,12 +30,6 @@
     sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
   }
   {
-    name = "bracket-pair-colorizer-2";
-    publisher = "CoenraadS";
-    version = "0.2.1";
-    sha256 = "0bfvzs4ac537zqhnqaa38jf4lhiy1fmqcv6lq89nnx8k963380z7";
-  }
-  {
     name = "doxdocgen";
     publisher = "cschlosser";
     version = "1.3.2";
@@ -44,8 +38,8 @@
   {
     name = "dendron";
     publisher = "dendron";
-    version = "0.59.1";
-    sha256 = "0p3igwn50a4zl95ai6rz5ljsfqqhr6r6mkr0jy9w32zzli0n8lbr";
+    version = "0.80.3";
+    sha256 = "1ayz3xyknhrhqhm0m4p4qda2srqn8dz8yk644idsmhgllzzk9gdz";
   }
   {
     name = "dendron-markdown-preview-enhanced";
@@ -68,50 +62,44 @@
   {
     name = "vscode-opencl";
     publisher = "galarius";
-    version = "0.7.1";
-    sha256 = "1awgd6b09ycmrx8jgwmndk3yz7gdxfwdjmn32bx6mhls6kla8g7d";
+    version = "0.7.2";
+    sha256 = "1w64b7da3q1mlqcl6psv3qm2m9i06cbzpgvhwdhb4i2wg23f0zmc";
   }
   {
     name = "latex-workshop";
     publisher = "James-Yu";
-    version = "8.20.2";
-    sha256 = "1ygpw8lvdvyvg82gyyzmlvn71qx8dh9np64xzf4n1mz03n7ljccz";
+    version = "8.23.0";
+    sha256 = "1rlw3ys6kwq46jc26iirpriwvrkmxs62mxi2arcn1y72wh1fqwi0";
   }
   {
     name = "vscode-clangd";
     publisher = "llvm-vs-code-extensions";
-    version = "0.1.13";
-    sha256 = "0qjllvg2wwy3w8gg7q9dkbs0mccxxdq8cg59pbvw0vd8rxn71jpw";
-  }
-  {
-    name = "rust-analyzer";
-    publisher = "matklad";
-    version = "0.2.743";
-    sha256 = "0j4njspzr2nz2lavy2d9hhxqay88v7g9d74dilnh7dgm8jqi8gny";
+    version = "0.1.15";
+    sha256 = "0skasnc490wp0l5xzpdmwdzjr4qiy63kg2qi27060m5yqkq3h8xn";
   }
   {
     name = "python";
     publisher = "ms-python";
-    version = "2021.9.1230869389";
-    sha256 = "0v4v5fcf2z1cys2if4k64qdwvr96hqvqw31fhdrrwwbgmx8cxjj3";
+    version = "2022.0.1786462952";
+    sha256 = "1yxrz0zp6hizzddml7maqxj1c0y08r9ypv6sg1fpk3q2kh81cpmd";
   }
   {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2021.9.1001244851";
-    sha256 = "1lngrzrnwd9q5773k5afwxrcm35srl0jmh0cs46nhbp4igs4ipgx";
+    version = "2022.1.1001775990";
+    sha256 = "1wgs92zh3ajch7si83h9dd5hhysr6jg8yy46f08770s3z9cq61j3";
   }
   {
     name = "markdown-preview-enhanced";
     publisher = "shd101wyy";
-    version = "0.6.0";
-    sha256 = "0wxvvd1lvcivc6i2fvisihlydb7dkwv5alm7scqc35gwx2126arn";
+    version = "0.6.1";
+    sha256 = "06wfwjpqiz77kzrasavszn7xnjy3g41x8p92zi78081p36ljzjra";
   }
   {
     name = "rewrap";
     publisher = "stkb";
-    version = "1.14.0";
-    sha256 = "0phffzqv1nmwsgcx6abgzbzw95zc0zlnhsjv2grs5mcsgrghl759";
+    version = "17.4.0";
+    sha256 = "154wa5sfhypm02hm3n5z7qvr9zb6qcsx0nz1p5wqisrfm7jxni68";
   }
   {
     name = "even-better-toml";

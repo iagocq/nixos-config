@@ -11,8 +11,8 @@ in
       default = true;
     };
 
-    bootloader = mkOption {
-      type = types.enum [ "none" "grub" "systemd-boot" "extlinux" ];
+    loader = mkOption {
+      type = types.enum [ "none" "grub" "systemd-boot" "extlinux" "raspberrypi" ];
       default = "systemd-boot";
     };
 
@@ -38,7 +38,7 @@ in
 
     mount = mkOption {
       type = types.bool;
-      default = cfg.bootloader != "extlinux";
+      default = cfg.loader != "extlinux";
     };
 
     cryptodisk = mkOption {
@@ -60,9 +60,7 @@ in
   config = if !isHomeManager then mkIf cfg.enable {
     boot = {
       loader = mkMerge [
-        {
-          timeout = 0;
-        }
+        { timeout = 0; }
 
         (mkIf cfg.efi {
           efi = {
@@ -71,7 +69,7 @@ in
           };
         })
 
-        (mkIf (cfg.bootloader == "grub") {
+        (mkIf (cfg.loader == "grub") {
           grub = {
             enable = mkDefault true;
             version = 2;
@@ -82,14 +80,21 @@ in
           };
         })
 
-        (mkIf (cfg.bootloader == "extlinux") {
+        (mkIf (cfg.loader == "raspberrypi") {
+          grub.enable = false;
+          systemd-boot.enable = false;
+          raspberryPi = {
+            enable = true;
+            version = 3;
+          };
+        })
+
+        (mkIf (cfg.loader == "extlinux") {
           generic-extlinux-compatible.enable = mkDefault true;
         })
 
-        (mkIf (cfg.bootloader == "systemd-boot") {
-          systemd-boot = {
-            enable = true;
-          };
+        (mkIf (cfg.loader == "systemd-boot") {
+          systemd-boot.enable = true;
         })
       ];
     };
