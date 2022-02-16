@@ -55,6 +55,15 @@
         nixpkgs = lib.attrsets.recursiveUpdate nixpkgsConfig nixpkgs;
         modules = flakeModules ++ modules;
       });
+
+      mkOlive = system: mkSystem {
+        host = "olive";
+        inherit system;
+        modules = [{
+          device.boot.mount = false;
+          device.zfs.mount = false;
+        }];
+      };
     in
     {
       nixosConfigurations = {
@@ -92,16 +101,8 @@
           system = "aarch64-linux";
         };
 
-        pineapple-no-mount = mkSystem {
-          host = "pineapple";
-          system = "aarch64-linux";
-          modules = [
-            {
-              device.boot.mount = false;
-              device.zfs.mount = false;
-            }
-          ];
-        };
+        olive-aarch64 = mkOlive "aarch64-linux";
+        olive-x86_64 = mkOlive "x86_64-linux";
 
         lap-1 = mkSystem {
           users = [ "c" "iago" ];
