@@ -33,6 +33,7 @@ let
         ({ options, ...}: {
           networking.hostName = host;
           nix.registry.nixpkgs.flake = inputs.nixpkgs;
+          nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
           nixpkgs = lib.attrsets.recursiveUpdate {
             overlays = mkOverlays { inherit nixpkgs system overlays; };

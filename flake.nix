@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
-    tribler-nixpkgs.url = "github:viric/nixpkgs/tribler-master2";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -15,6 +14,8 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
+    nur.url = "github:nix-community/NUR";
+
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
   };
 
@@ -23,22 +24,20 @@
       lib = import ./lib.nix { inherit (inputs) nixpkgs home-manager; };
 
       flakeOverlays = cfg:
-        let
-          tribler-nixpkgs = import inputs.tribler-nixpkgs cfg;
-        in
-        [
-          (final: prev: {
-            tribler = tribler-nixpkgs.pkgs.tribler;
-          })
-          inputs.iago-nix.overlay
-          inputs.agenix.overlay
+        with inputs; [
+          iago-nix.overlay
+          agenix.overlay
+          nur.overlay
         ];
 
       flakeModules = with inputs; [
         agenix.nixosModules.age
         impermanence.nixosModules.impermanence
         iago-nix.nixosModules.lightspeed
-        { nix.nixPath = [ "nixpkgs=${nixpkgs}" ]; }
+        {
+          nix.registry.nur.flake = inputs.nur;
+          nix.nixPath = [ "nur=${inputs.nur}" ];
+        }
       ];
 
       nixpkgsConfig = {
