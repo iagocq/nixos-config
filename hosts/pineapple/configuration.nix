@@ -5,11 +5,61 @@
     (modulesPath + "/profiles/qemu-guest.nix")
 
     ./device.nix
+    ./wireguard.nix
   ];
 
   boot = {
     kernelParams = [ "boot.shell_on_fail" ];
     initrd.availableKernelModules = [ "virtio_pci" "usbhid" ];
+    binfmt.emulatedSystems = [ "x86_64-linux" ];
+  };
+
+  networking.nat.enable = true;
+  networking.nameservers = [ "1.1.1.1" ];
+
+  srv.acme = {
+    enable = true;
+    email = "18238046+iagocq@users.noreply.github.com";
+    domain = "velha.casa";
+    credentials = config.age.secrets."acme-credentials".path;
+    provider = "cloudflare";
+  };
+
+  srv.nginx = {
+    enable = true;
+    domain = "velha.casa";
+    dynamicResolving = false;
+  };
+
+  srv.nginx.vhosts."velha.casa" = {
+    root = "/srv/www/velha.casa";
+    locations."/" = {
+      tryFiles = "$uri $uri/index.html =404";
+    };
+    locations."/mc/s/" = {
+      proxyPass = "http://127.0.0.1:8100/";
+    };
+    locations."/mc/c/" = {
+      proxyPass = "http://127.0.0.1:8101/";
+    };
+    locations."/static" = {
+      tryFiles = "$uri /agrega$uri =404";
+    };
+    locations."/agrega" = {
+      tryFiles = "$uri /agrega/index.html";
+    };
+    locations."/agrega/api/" = {
+      proxyPass = "http://127.0.0.1:3001/";
+    };
+  };
+
+  device.zfs.eyd.persist.directories = [ "/srv/www/velha.casa" ];
+
+  age.secrets = (import ./age.nix).age "acme-credentials";
+
+  services.mysql = {
+    enable = true;
+    package = pkgs.mariadb;
   };
 
   services.gitlab-runner = {

@@ -17,7 +17,18 @@
     };
 
     network = {
-      interfaces.dhcp = [ "enp0s3" ];
+      interfaces.static.enp0s3.ipv4 = {
+        addresses = [
+          { address = "10.0.0.195"; prefixLength = 24; }
+        ];
+        routes = [
+          {
+            address = "0.0.0.0";
+            prefixLength = 0;
+            via = "10.0.0.1";
+          }
+        ];
+      };
       firewall = false;
     };
   };
