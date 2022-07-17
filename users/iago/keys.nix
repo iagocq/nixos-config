@@ -15,6 +15,7 @@ rec {
     pineapple = trusted.lasagna;
     generic = trusted.lasagna;
     lap-1 = trusted.lasagna;
+    buffet = trusted.lasagna;
   };
 
   age = with keys; [ lasagna moldy-lasagna pie pineapple ];

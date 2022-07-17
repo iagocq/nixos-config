@@ -1,0 +1,124 @@
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 75c83768c..c3bfb9bbe 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -1932,6 +1932,8 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 		 */
+ 		set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
+ 		set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
++		set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
++		set_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks);
+ 
+ 		/* Clear the reset quirk since this is not an actual
+ 		 * early Bluetooth 1.1 device from CSR.
+@@ -1942,7 +1944,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 		/*
+ 		 * Special workaround for these BT 4.0 chip clones, and potentially more:
+ 		 *
+-		 * - 0x0134: a Barrot 8041a02                 (HCI rev: 0x1012 sub: 0x0810)
++		 * - 0x0134: a Barrot 8041a02                 (HCI rev: 0x0810 sub: 0x1012)
+ 		 * - 0x7558: IC markings FR3191AHAL 749H15143 (HCI rev/sub-version: 0x0709)
+ 		 *
+ 		 * These controllers are really messed-up.
+@@ -1971,7 +1973,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+ 		if (ret >= 0)
+ 			msleep(200);
+ 		else
+-			bt_dev_err(hdev, "CSR: Failed to suspend the device for our Barrot 8041a02 receive-issue workaround");
++			bt_dev_warn(hdev, "CSR: Couldn't suspend the device for our Barrot 8041a02 receive-issue workaround");
+ 
+ 		pm_runtime_forbid(&data->udev->dev);
+ 
+diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+index 63065bc01..a17b8453a 100644
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -255,6 +255,16 @@ enum {
+ 	 * during the hdev->setup vendor callback.
+ 	 */
+ 	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
++
++	/* When this quirk is set, HCI_OP_SET_EVENT_FLT requests with
++	 * HCI_FLT_CLEAR_ALL are ignored and event filtering is
++	 * completely avoided. A subset of the CSR controller
++	 * clones struggle with this and instantly lock up.
++	 *
++	 * Note that devices using this must (separately) disable
++	 * runtime suspend, because event filtering takes place there.
++	 */
++	HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL,
+ };
+ 
+ /* HCI device flags */
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 8d33aa648..51d53c476 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -148,6 +148,7 @@ static int hci_init1_req(struct hci_request *req, unsigned long opt)
+ 
+ static void bredr_setup(struct hci_request *req)
+ {
++	struct hci_dev *hdev = req->hdev;
+ 	__le16 param;
+ 	__u8 flt_type;
+ 
+@@ -169,9 +170,13 @@ static void bredr_setup(struct hci_request *req)
+ 	/* Read Current IAC LAP */
+ 	hci_req_add(req, HCI_OP_READ_CURRENT_IAC_LAP, 0, NULL);
+ 
+-	/* Clear Event Filters */
+-	flt_type = HCI_FLT_CLEAR_ALL;
+-	hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &flt_type);
++	/* Clear Event Filters; some fake CSR controllers lock up after setting
++	 * this type of filter, so avoid sending the request altogether.
++	 */
++	if (!test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks)) {
++		flt_type = HCI_FLT_CLEAR_ALL;
++		hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &flt_type);
++	}
+ 
+ 	/* Connection accept timeout ~20 secs */
+ 	param = cpu_to_le16(0x7d00);
+diff --git a/net/bluetooth/hci_request.c b/net/bluetooth/hci_request.c
+index 92611bfc0..c417325fe 100644
+--- a/net/bluetooth/hci_request.c
++++ b/net/bluetooth/hci_request.c
+@@ -979,12 +979,16 @@ void hci_req_add_le_passive_scan(struct hci_request *req)
+ 
+ static void hci_req_clear_event_filter(struct hci_request *req)
+ {
++	struct hci_dev *hdev = req->hdev;
+ 	struct hci_cp_set_event_filter f;
+ 
+-	if (!hci_dev_test_flag(req->hdev, HCI_BREDR_ENABLED))
++	if (!hci_dev_test_flag(hdev, HCI_BREDR_ENABLED))
++		return;
++
++	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
+ 		return;
+ 
+-	if (hci_dev_test_flag(req->hdev, HCI_EVENT_FILTER_CONFIGURED)) {
++	if (hci_dev_test_flag(hdev, HCI_EVENT_FILTER_CONFIGURED)) {
+ 		memset(&f, 0, sizeof(f));
+ 		f.flt_type = HCI_FLT_CLEAR_ALL;
+ 		hci_req_add(req, HCI_OP_SET_EVENT_FLT, 1, &f);
+@@ -993,15 +997,18 @@ static void hci_req_clear_event_filter(struct hci_request *req)
+ 
+ static void hci_req_set_event_filter(struct hci_request *req)
+ {
++	struct hci_dev *hdev = req->hdev;
+ 	struct bdaddr_list_with_flags *b;
+ 	struct hci_cp_set_event_filter f;
+-	struct hci_dev *hdev = req->hdev;
+ 	u8 scan = SCAN_DISABLED;
+ 	bool scanning = test_bit(HCI_PSCAN, &hdev->flags);
+ 
+ 	if (!hci_dev_test_flag(hdev, HCI_BREDR_ENABLED))
+ 		return;
+ 
++	if (test_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks))
++		return;
++
+ 	/* Always clear event filter when starting */
+ 	hci_req_clear_event_filter(req);
+ 

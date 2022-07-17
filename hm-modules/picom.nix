@@ -17,10 +17,10 @@ in
     services.picom = mkIf cfg.enable {
       enable = true;
       backend = "xrender";
-      blur = true;
+      # blur = true;
       shadow = true;
       # vSync = true;
-      blurExclude = [ "class_g = 'slop'" ];
+      # blurExclude = [ "class_g = 'slop'" ];
       shadowExclude = [ "class_g = 'Firefox' && argb" ];
       opacityRule = [
         "100:_NET_WM_STATE@[0]:32a = '_NET_WM_STATE_FULLSCREEN'" 

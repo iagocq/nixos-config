@@ -113,6 +113,11 @@
           host = "installer";
           system = "x86_64-linux";
         };
+
+        buffet = mkSystem {
+          host = "buffet";
+          system = "x86_64-linux";
+        };
       };
     }
   );
