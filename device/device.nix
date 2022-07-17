@@ -113,7 +113,7 @@ in
       useDns = mkDefault true;
       passwordAuthentication = mkDefault false;
       kbdInteractiveAuthentication = mkDefault false;
-      permitRootLogin = mkDefault "no";
+      permitRootLogin = mkDefault "prohibit-password";
     };
 
     security.sudo.extraConfig = ''

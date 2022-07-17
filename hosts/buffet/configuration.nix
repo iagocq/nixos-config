@@ -4,9 +4,12 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./device.nix
+    ./router.nix
   ];
 
   hardware.cpu.amd.updateMicrocode = true;
+
+  age.secrets = (import ./age.nix).age;
 
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
