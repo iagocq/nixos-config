@@ -17,6 +17,6 @@ rec {
   age = with keys; {
     internal = [ lasagna pie moldy-lasagna buffet ];
     external = [ lasagna pineapple ];
-    router = trusted.buffet;
+    router = trusted.buffet ++ age.internal;
   };
 }
