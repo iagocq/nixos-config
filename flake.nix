@@ -112,6 +112,13 @@
         installer = mkSystem {
           host = "installer";
           system = "x86_64-linux";
+          modules = [
+            ({ modulesPath, ... }: {
+              imports = [
+                "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
+              ];
+            })
+          ];
         };
 
         buffet = mkSystem {

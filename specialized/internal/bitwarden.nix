@@ -16,7 +16,7 @@ in
       domain = nginx.domain;
       baseUri = "/bitwarden/";
       config = {
-        websocketEnable = true;
+        websocketEnabled = true;
         websocketAddress = "127.0.0.1";
         websocketPort = 8091;
         signupsAllowed = false;

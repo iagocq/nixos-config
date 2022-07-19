@@ -60,7 +60,7 @@ in
   config = if !isHomeManager then mkIf cfg.enable {
     boot = {
       loader = mkMerge [
-        { timeout = 0; }
+        { timeout = mkDefault 0; }
 
         (mkIf cfg.efi {
           efi = {

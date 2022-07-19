@@ -33,28 +33,19 @@ in
   };
 
   config.spc.int.network = {
-    domain = "iago.casa";
-    lanSubdomain = "intra";
-    lanDomain = "${cfg.lanSubdomain}.${cfg.domain}";
+    domain = "dentro.da.velha.casa";
+    lanSubdomain = "";
+    lanDomain = "${cfg.domain}";
     net = "10.36.21.";
     netmask = "255.255.255.0";
     subnet = "${cfg.net}0/24";
     broadcast = "${cfg.net}255";
-    dnsServer = "${cfg.net}11";
+    dnsServer = "${cfg.net}1";
     gateway = "${cfg.net}1";
     defaultRoute = {
       address = "0.0.0.0";
       prefixLength = 0;
       via = cfg.gateway;
-    };
-    server = {
-      host = "pie";
-      mainAddress = "${cfg.net}10";
-      addresses = [
-        { address = "${cfg.net}10"; prefixLength = 24; }
-        { address = "${cfg.net}11"; prefixLength = 24; }
-      ];
-      extraHosts = "";
     };
   };
 }

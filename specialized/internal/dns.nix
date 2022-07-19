@@ -40,7 +40,7 @@ in
         '') zones);
       in
       {
-        enable = true;
+        enable = false;
         listenOn = [ network.server.mainAddress ];
         forwarders = [ network.dnsServer ];
         cacheNetworks = [ network.subnet ];

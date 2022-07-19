@@ -11,6 +11,7 @@ in
 
   config = mkIf cfg.enable {
     srv.nginx = {
+      enable = true;
       domain = config.spc.int.network.domain;
       dynamicResolving = false;
     };

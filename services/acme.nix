@@ -33,7 +33,7 @@ in
   config = mkIf cfg.enable {
     security.acme = {
       acceptTerms = true;
-      email = cfg.email;
+      defaults.email = cfg.email;
       certs.${cfg.domain} = {
         credentialsFile = mkIf (cfg.credentials != null) cfg.credentials;
         dnsProvider = cfg.provider;
