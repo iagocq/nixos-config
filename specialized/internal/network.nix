@@ -47,5 +47,6 @@ in
       prefixLength = 0;
       via = cfg.gateway;
     };
+    server.mainAddress = "${cfg.net}1";
   };
 }

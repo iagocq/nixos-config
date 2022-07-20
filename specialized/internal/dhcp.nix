@@ -23,10 +23,9 @@ in
         dhcpSubnet = network.subnet;
         router = network.gateway;
         dnsServer = network.dnsServer;
-        extraConfig = "";
-        #extraConfig = let host = config.networking.hostName; in ''
-        #  host-record=${host}.${network.lanDomain},${host},${network.server.mainAddress}
-        #'';
+        extraConfig = let host = config.networking.hostName; in ''
+          host-record=${host}.${network.lanDomain},${host},${network.server.mainAddress}
+        '';
       };
   };
 }

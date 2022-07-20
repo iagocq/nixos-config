@@ -33,6 +33,9 @@
       enable = true;
       internalInterfaces = [ "lan" ];
       externalInterface = "ppp0";
+      extraCommands = ''
+        iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+      '';
     };
   };
 
@@ -71,6 +74,7 @@
     interface = "wlp1s0";
     ssid = "!";
     noScan = true;
+    channel = 11;
     extraConfig = ''
       bridge=lan
       ieee80211n=1
